@@ -47,47 +47,77 @@ New options are available for:
 What's new in Tarantool 1.7?
 ================================================================================
 
-The disk-based storage engine, which was called `sophia` or `phia`
-in earlier versions, is superseded by the `vinyl` storage engine.
+The disk-based storage engine, called `sophia` or `phia` in earlier versions,
+now superseded by the `vinyl` storage engine.
 
-There are new types for indexed fields.
+New :ref:`data types <index-box_data-types>` supported:
 
-The LuaJIT version is updated.
+* `scalar`, `integer` and `number` (for
+  :ref:`indexed fields <index-box_indexed-field-types>`),
+* `unsigned` (same as `num`, can be used interchangeably),
+* `int` (a new data type, includes negative values).
 
-Automatic replica set bootstrap (for easier configuration of a new replica set)
-is supported.
+An updated LuaJIT version (with breaking changes).
 
-The ``space_object:inc()`` function is removed.
+Automatic :ref:`replica set bootstrap <replication-mechanism_automatic-bootstrap>`.
+Now replica set configuration has become much easier: just take the same
+instance file for each replica -- and go! All replicas start without checkpoint
+files, elect a leader that creates the first checkpoint, and the others go on
+with that checkpoint. See an example :ref:`here <replication-bootstrap>`.
 
-The ``space_object:dec()`` function is removed.
+New :ref:`format <internals-wal>` of checkpoint files (.xlog/.snap).
+The new format is backward compatible with 1.6: you can start a 1.7 instance
+with 1.6 checkpoints, but Tarantool will update them to the new format,
+so you won't be able to roll back without a backup.
+See more :ref:`here <admin-upgrades_instance>`.
 
-The ``space_object:bsize()`` function is added.
+On-the-fly compression of checkpoint files that optimizes disk usage.
 
-The ``box.coredump()`` function is removed, for an alternative see
-:ref:`Core dumps <admin-core_dumps>`.
+A new system bus for message exchange that minimizes the number of fiber
+context switches.
 
-The ``hot_standby`` configuration option is added.
+Breaking changes in ``net.box`` module:
 
-Configuration parameters revised:
+* new CALL semantics, incompatible with 1.6 (to make
+  :ref:`net.box.connect() <net_box-connect>` method work with Tarantool 1.6,
+  set the option ``call_16=true``),
+* connection via admin console abandoned (``console()`` method removed),
+* :ref:`wait_state() <conn-wait_state>` method added,
+* ``wait_connected`` option in :ref:`net.box.connect() <net_box-connect>` method
+  now returns ``true`` (formerly, it returned ``active``/``closed``).
 
-* Parameters renamed:
+Removed:
 
-  * ``slab_alloc_arena`` (in gigabytes) to ``memtx_memory`` (in bytes),
-  * ``slab_alloc_minimal`` to ``memtx_min_tuple_size``,
-  * ``slab_alloc_maximal`` to ``memtx_max_tuple_size``,
-  * ``replication_source`` to ``replication``,
-  * ``snap_dir`` to ``memtx_dir``,
-  * ``logger`` to ``log``,
-  * ``logger_nonblock`` to ``log_nonblock``,
-  * ``snapshot_count`` to ``checkpoint_count``,
-  * ``snapshot_period`` to ``checkpoint_interval``,
-  * ``panic_on_wal_error`` and ``panic_on_snap_error`` united under
-    ``force_recovery``.
+* ``space_object:inc()`` function,
+* ``space_object:dec()`` function,
+* ``box.coredump()`` function, for an alternative see
+  :ref:`Core dumps <admin-core_dumps>`.
 
-* Until Tarantool 1.8, you can use :ref:`deprecated parameters <cfg_deprecated>`
-  for both initial and runtime configuration, but Tarantool will display a warning.
-  Also, you can specify both deprecated and up-to-date parameters, provided
-  that their values are harmonized. If not, Tarantool will display an error.
+Added:
+
+* :ref:`space_object:bsize() <box_space-bsize>` function,
+* :ref:`hot_standby <index-hot_standby>` configuration option.
+
+Configuration parameters renamed:
+
+* ``slab_alloc_arena`` (in gigabytes) to ``memtx_memory`` (in bytes),
+* ``slab_alloc_minimal`` to ``memtx_min_tuple_size``,
+* ``slab_alloc_maximal`` to ``memtx_max_tuple_size``,
+* ``replication_source`` to ``replication``,
+* ``snap_dir`` to ``memtx_dir``,
+* ``logger`` to ``log``,
+* ``logger_nonblock`` to ``log_nonblock``,
+* ``snapshot_count`` to ``checkpoint_count``,
+* ``snapshot_period`` to ``checkpoint_interval``,
+* ``panic_on_wal_error`` and ``panic_on_snap_error`` united under
+  ``force_recovery``.
+
+.. NOTE::
+
+   Until Tarantool 1.8, you can use :ref:`deprecated parameters <cfg_deprecated>`
+   for both initial and runtime configuration, but Tarantool will display a warning.
+   Also, you can specify both deprecated and up-to-date parameters, provided
+   that their values are harmonized. If not, Tarantool will display an error.
 
 .. _whats_new_169:
 

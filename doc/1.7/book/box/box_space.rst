@@ -8,10 +8,11 @@
                                    Overview
 ===============================================================================
 
-The ``box.space`` submodule has the data-manipulation functions ``select``,
-``insert``, ``replace``, ``update``, ``upsert``, ``delete``, ``get``, ``put``.
-It also has members, such as id, and whether or not a space is enabled. Submodule
-source code is available in file
+The ``box.space`` submodule has the data-manipulation functions (``select``,
+``insert``, ``replace``, ``update``, ``upsert``, ``delete``, ``get``, ``put``).
+It also has members, such as ``id``, and whether or not a space is enabled.
+
+Submodule source code is available in file
 `src/box/lua/schema.lua <https://github.com/tarantool/tarantool/blob/1.7/src/box/lua/schema.lua>`_.
 
 ===============================================================================
@@ -225,16 +226,19 @@ Below is a list of all ``box.space`` functions and members.
 
     .. method:: create_index(index-name [, options ])
 
-        Create an :ref:`index <index-box_index>`. It is mandatory to create an index for a space
-        before trying to insert tuples into it, or select tuples from it. The
-        first created index, which will be used as the primary-key index, must be
-        unique.
+        Create an :ref:`index <index-box_index>`.
+
+        It is mandatory to create an index for a space **before** trying to
+        insert tuples into it, or select tuples from it.
+
+        The first created index, which will be used as the primary-key index,
+        must be unique.
 
         :param space_object space_object: an :ref:`object reference
                                           <app_server-object_reference>`
         :param string index_name: name of index, which should not be a number
                                   and should not contain special characters
-        :param table     options:
+        :param table     options: see options below
 
         :return: index object
         :rtype:  index_object
@@ -263,12 +267,12 @@ Below is a list of all ``box.space`` functions and members.
             +---------------------+-------------------------------------------------------+----------------------------------+-------------------------------+
             | if_not_exists       | no error if duplicate name                            | boolean                          | ``false``                     |
             +---------------------+-------------------------------------------------------+----------------------------------+-------------------------------+
-            | parts               | field-numbers  + types                                | {field_no, 'unsigned' or         | ``{1, 'unsigned'}``           |
-            |                     |                                                       | 'string' or 'integer' or         |                               |
-            |                     |                                                       | 'number' or 'boolean' or         |                               |
-            |                     |                                                       | 'array' or 'scalar',             |                               |
-            |                     |                                                       | and optional collation,          |                               |
-            |                     |                                                       | and optional is_nullable value}  |                               |
+            | parts               | field-number +                                        | {field_no, 'unsigned' or         | ``{1, 'unsigned'}``           |
+            |                     | :ref:`type <index-box_indexed-field-types>` |br|      | 'string' or 'integer' or         |                               |
+            |                     | [+ :ref:`collation <index-collation>`] |br|           | 'number' or 'boolean' or         |                               |
+            |                     | [+ :ref:`is_nullable <index-is_nullable>`]            | 'array' or 'scalar',             |                               |
+            |                     |                                                       | optional collation,              |                               |
+            |                     |                                                       | optional is_nullable value}      |                               |
             +---------------------+-------------------------------------------------------+----------------------------------+-------------------------------+
             | dimension           | affects :ref:`RTREE <box_index-rtree>` only           | number                           | 2                             |
             +---------------------+-------------------------------------------------------+----------------------------------+-------------------------------+
@@ -290,22 +294,28 @@ Below is a list of all ``box.space`` functions and members.
             |                     | <box_schema-sequence_create_index>`                   |                                  |                               |
             +---------------------+-------------------------------------------------------+----------------------------------+-------------------------------+
 
-        **Note re storage engine:** vinyl has extra options which by default are
-        based on configuration parameters
-        :ref:`vinyl_bloom_fpr <cfg_storage-vinyl_bloom_fpr>`,
-        :ref:`vinyl_page_size <cfg_storage-vinyl_page_size>`,
-        :ref:`vinyl_range_size <cfg_storage-vinyl_range_size>`,
-        :ref:`vinyl_run_count_per_level <cfg_storage-vinyl_run_count_per_level>`, and
-        :ref:`vinyl_run_size_ratio <cfg_storage-vinyl_run_size_ratio>`
-        -- see the description of those parameters.
-        The current values can be seen by selecting from
-        :ref:`box.space._index <box_space-index>`.
+        **Note re storage engine:**
+
+        * vinyl has extra options which by default are
+          based on configuration parameters
+          :ref:`vinyl_bloom_fpr <cfg_storage-vinyl_bloom_fpr>`,
+          :ref:`vinyl_page_size <cfg_storage-vinyl_page_size>`,
+          :ref:`vinyl_range_size <cfg_storage-vinyl_range_size>`,
+          :ref:`vinyl_run_count_per_level <cfg_storage-vinyl_run_count_per_level>`, and
+          :ref:`vinyl_run_size_ratio <cfg_storage-vinyl_run_size_ratio>`
+          -- see the descriptions of those parameters.
+          The current values can be seen by selecting from
+          :ref:`box.space._index <box_space-index>`.
+        * vinyl supports only the TREE index type, and vinyl
+          secondary indexes must be created before tuples are inserted.
 
         **Possible errors:**
 
         * too many parts;
         * index '...' already exists;
         * primary key must be unique.
+
+        **Example:**
 
         .. code-block:: tarantoolsession
 
@@ -315,135 +325,6 @@ Below is a list of all ``box.space`` functions and members.
             tarantool> s:create_index('primary', {unique = true, parts = {1, 'unsigned', 2, 'string'}})
             ---
             ...
-
-    .. _details_about_index_field_types:
-
-    **Details about index field types:**
-
-    The seven index field types (unsigned | string | integer | number |
-    boolean | array | scalar) differ depending on what values are allowed, and
-    what index types are allowed.
-
-    * **unsigned**: unsigned integers between 0 and 18446744073709551615,
-      about 18 quintillion. May also be called 'uint' or 'num', but 'num'
-      is deprecated. Legal in memtx TREE or HASH indexes, and in vinyl TREE
-      indexes.
-    * **string**: any set of octets, up to the :ref:`maximum length
-      <limitations_bytes_in_index_key>`. May also be called 'str'. Legal in
-      memtx TREE or HASH or BITSET indexes, and in vinyl TREE indexes.
-      A string may have a :ref:`collation <index-collation>`.
-    * **integer**: integers between -9223372036854775808 and 18446744073709551615.
-      May also be called 'int'. Legal in memtx TREE or HASH indexes, and in
-      vinyl TREE indexes.
-    * **number**: integers between -9223372036854775808 and 18446744073709551615,
-      single-precision floating point numbers, or double-precision floating
-      point numbers. Legal in memtx TREE or HASH indexes, and in vinyl TREE
-      indexes.
-    * **boolean**: true or false. Legal in memtx TREE or HASH indexes, and in
-      vinyl TREE indexes.
-    * **array**: array of numbers. Legal in memtx :ref:`RTREE <box_index-rtree>` indexes.
-    * **scalar**: booleans (true or false), or integers between
-      -9223372036854775808 and 18446744073709551615, or single-precision
-      floating point numbers, or double-precison floating-point numbers, or
-      strings. When there is a mix of types, the key order is:
-      booleans, then numbers, then strings. Legal in memtx TREE or
-      HASH indexes, and in vinyl TREE indexes.
-
-    Additionally, `nil` is allowed with any index field type if
-    :ref:`is_nullable=true <box_space-is_nullable>` is specified.
-
-    .. _box_space-index_field_types:
-
-    **Index field types to use in space_object:create_index()**
-
-    .. container:: table stackcolumn
-
-        .. rst-class:: left-align-column-1
-        .. rst-class:: left-align-column-2
-        .. rst-class:: left-align-column-3
-        .. rst-class:: left-align-column-4
-        .. rst-class:: top-align-column-1
-
-        +------------------+---------------------------+---------------------------------------+-------------------+
-        | Index field type | What can be in it         | Where is it legal                     | Examples          |
-        +------------------+---------------------------+---------------------------------------+-------------------+
-        | **unsigned**     | integers between 0 and    | memtx TREE or HASH                    | 123456 |br|       |
-        |                  | 18446744073709551615      | indexes, |br|                         |                   |
-        |                  |                           | vinyl TREE indexes                    |                   |
-        +------------------+---------------------------+---------------------------------------+-------------------+
-        |  **string**      | strings -- any set of     | memtx TREE or HASH indexes |br|       | 'A B C' |br|      |
-        |                  | octets                    | vinyl TREE indexes                    | '\\65 \\66 \\67'  |
-        +------------------+---------------------------+---------------------------------------+-------------------+
-        |  **integer**     | integers between          | memtx TREE or HASH indexes, |br|      | -2^63 |br|        |
-        |                  | -9223372036854775808 and  | vinyl TREE indexes                    |                   |
-        |                  | 18446744073709551615      |                                       |                   |
-        +------------------+---------------------------+---------------------------------------+-------------------+
-        | **number**       | integers between          | memtx TREE or HASH indexes, |br|      | 1.234 |br|        |
-        |                  | -9223372036854775808 and  | vinyl TREE indexes                    | -44 |br|          |
-        |                  | 18446744073709551615,     |                                       | 1.447e+44         |
-        |                  | single-precision          |                                       |                   |
-        |                  | floating point numbers,   |                                       |                   |
-        |                  | double-precision          |                                       |                   |
-        |                  | floating point numbers    |                                       |                   |
-        +------------------+---------------------------+---------------------------------------+-------------------+
-        | **boolean**      | true or false             | memtx TREE or HASH indexes, |br|      | false |br|        |
-        |                  |                           | vinyl TREE indexes                    | true              |
-        +------------------+---------------------------+---------------------------------------+-------------------+
-        | **array**        | array of integers between | memtx RTREE indexes                   | {10, 11} |br|     |
-        |                  | -9223372036854775808 and  |                                       | {3, 5, 9, 10}     |
-        |                  | 9223372036854775807       |                                       |                   |
-        +------------------+---------------------------+---------------------------------------+-------------------+
-        | **scalar**       | booleans (true or false), | memtx TREE or HASH indexes, |br|      | true |br|         |
-        |                  | integers between          | vinyl TREE indexes                    | -1 |br|           |
-        |                  | -9223372036854775808 and  |                                       | 1.234 |br|        |
-        |                  | 18446744073709551615,     |                                       | '' |br|           |
-        |                  | single-precision floating |                                       | 'ру'              |
-        |                  | point numbers,            |                                       |                   |
-        |                  | double-precision floating |                                       |                   |
-        |                  | point numbers, strings    |                                       |                   |
-        +------------------+---------------------------+---------------------------------------+-------------------+
-
-    .. _box_space-is_nullable:
-
-    **Allowing null for an indexed key:** If the index type is TREE, and the index
-    is not the primary index, then the ``parts={...}`` clause may include
-    ``is_nullable=true`` (the default) or ``is_nullable=false``. If ``is_nullable`` is
-    true, then it is legal to insert ``nil`` or an equivalent such as ``msgpack.NULL``.
-    Within indexes, such "null values" are always treated as equal to other null
-    values, and are always treated as less than non-null values.
-    Nulls may appear multiple times even in a unique index. Example:
-
-    .. code-block:: lua
-
-        box.space.tester:create_index('I',{unique=true,parts={{2,'number',is_nullable=true}}})
-
-    .. _box_space-field_names:
-
-    **Using field names instead of field numbers:** ``create_index()`` can use
-    field names and/or field types described by the optional
-    :ref:`space_object:format() <box_space-format>` clause.
-    In the following example, we show ``format()`` for a space that has two columns
-    named 'x' and 'y', and then we show five variations of the ``parts={}``
-    clause of ``create_index()``,
-    first for the 'x' column, second for both the 'x' and 'y' columns.
-    The variations include omitting the type, using numbers, and adding extra braces.
-
-    .. code-block:: lua
-
-        box.space.tester:format({{name='x', type='scalar'}, {name='y', type='integer'}})
-        box.space.tester:create_index('I2',{parts={{'x','scalar'}}})
-        box.space.tester:create_index('I3',{parts={{'x','scalar'},{'y','integer'}}})
-        box.space.tester:create_index('I4',{parts={1,'scalar'}})
-        box.space.tester:create_index('I5',{parts={1,'scalar',2,'integer'}})
-        box.space.tester:create_index('I6',{parts={1}})
-        box.space.tester:create_index('I7',{parts={1,2}})
-        box.space.tester:create_index('I8',{parts={'x'}})
-        box.space.tester:create_index('I9',{parts={'x','y'}})
-        box.space.tester:create_index('I10',{parts={{'x'}}})
-        box.space.tester:create_index('I11',{parts={{'x'},{'y'}}})
-
-    **Note re storage engine:** vinyl supports only the TREE index type, and vinyl
-    secondary indexes must be created before tuples are inserted.
 
     .. _box_space-delete:
 
@@ -507,7 +388,8 @@ Below is a list of all ``box.space`` functions and members.
 
     .. method:: format(format-clause)
 
-        Declare field names and :ref:`types <index-box_data-types>`.
+        Declare field names and types (see an overview in
+        :ref:`Field format <index-field_format>` section).
 
         :param space_object space_object: an :ref:`object reference
                                           <app_server-object_reference>`
@@ -520,29 +402,6 @@ Below is a list of all ``box.space`` functions and members.
         * ``space_object`` does not exist;
         * field names are duplicated,
         * type is not legal.
-
-        Ordinarily Tarantool allows unnamed untyped fields.
-        But with ``format`` users can, for example, document
-        that the Nth field is the surname field and must contain strings.
-        It is also possible to specify a format clause in
-        :ref:`box.schema.space.create() <box_schema-space_create>`.
-
-        The format clause contains ``{name='...',type='...'}`` pairs.
-        The name may be any string, provided that two fields do not have the
-        same name.
-
-        The type can be any of those allowed for
-        :ref:`indexed fields <index-box_indexed-field-types>`:
-        unsigned | string | integer | number | boolean | array | scalar
-        (the same as the requirement in
-        :ref:`"Options for space_object:create_index" <box_space-create_index-options>`).
-
-        It is legal for tuples to have more fields than are described by a format
-        clause. The way to constrain the number of fields is to specify a space's
-        :ref:`field_count <box_space-field_count>` member.
-
-        It is legal to use ``format`` on a space that already has a format,
-        provided that there is no conflict with existing data or index definitions.
 
         **Example:**
 
@@ -575,6 +434,9 @@ Below is a list of all ``box.space`` functions and members.
         Names specified with the format clause can be used in
         :ref:`space_object:get() <box_space-get>` and in
         :ref:`space_object:create_index() <box_space-create_index>`.
+
+        It is also possible to specify a format clause in
+        :ref:`box.schema.space.create() <box_schema-space_create>`.
 
     .. _box_space-get:
 

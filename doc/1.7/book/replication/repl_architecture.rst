@@ -43,6 +43,8 @@ and .run files for vinyl. A replica joining an existing replica set, chooses an
 existing master and automatically downloads the initial state from it. This is
 called an **initial join**.
 
+.. _replication-mechanism_automatic-bootstrap:
+
 When an entire replica set is bootstrapped for the first time, there is no
 master which could provide the initial checkpoint. In such case, replicas
 connect to each other, elect a master, which then creates the starting set of

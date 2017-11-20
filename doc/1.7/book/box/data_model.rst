@@ -174,13 +174,15 @@ Lua vs MsgPack
 .. _table: http://www.lua.org/pil/2.5.html
 .. _cdata: http://luajit.org/ext_ffi.html#call
 
+.. _index-box_nil:
+
 In Lua, a **nil** type has only one possible value, also called *nil*
 (displayed as **null** on Tarantool's command line, since the output is in the
 YAML format).
 Nils may be compared to values of any types with == (is-equal)
 or ~= (is-not-equal), but other operations will not work.
-Nils may not be used in Lua tables; the workaround is to use
-:ref:`msgpack.NULL <msgpack-null>`
+Further we provide more details on working with
+:ref:`null values <index-is_nullable>` in Tarantool.
 
 A **boolean** is either ``true`` or ``false``.
 
@@ -257,70 +259,161 @@ integer values.
 
 Here's how Tarantool indexed field types correspond to MsgPack data types.
 
-.. container:: table
+.. include:: index_field_types_table.rst
 
-    .. rst-class:: left-align-column-1
-    .. rst-class:: left-align-column-2
-    .. rst-class:: left-align-column-3
-    .. rst-class:: left-align-column-4
-    .. rst-class:: top-align-column-1
+Additionally, for **secondary TREE indexes**, null values are allowed with
+any index field type if ``is_nullable=true`` is specified --
+see details on "null values" below.
 
-    +----------------------------+----------------------------------+----------------------+--------------------+
-    | Indexed field type         | MsgPack data type |br|           | Index type           | Examples           |
-    |                            | (and possible values)            |                      |                    |
-    +============================+==================================+======================+====================+
-    | **unsigned**               | **integer**                      | TREE, BITSET or HASH | 123456             |
-    | (may also be called ‘uint’ | (integer between 0 and           |                      |                    |
-    | or ‘num’, but ‘num’ is     | 18446744073709551615, i.e.       |                      |                    |
-    | deprecated)                | about 18 quintillion)            |                      |                    |
-    +----------------------------+----------------------------------+----------------------+--------------------+
-    | **integer**                | **integer**                      | TREE or HASH         | -2^63              |
-    | (may also be called ‘int’) | (integer between                 |                      |                    |
-    |                            | -9223372036854775808 and         |                      |                    |
-    |                            | 18446744073709551615)            |                      |                    |
-    +----------------------------+----------------------------------+----------------------+--------------------+
-    | **number**                 | **integer**                      | TREE or HASH         | 1.234              |
-    |                            | (integer between                 |                      |                    |
-    |                            | -9223372036854775808 and         |                      | -44                |
-    |                            | 18446744073709551615)            |                      |                    |
-    |                            |                                  |                      | 1.447e+44          |
-    |                            | **double**                       |                      |                    |
-    |                            | (single-precision floating       |                      |                    |
-    |                            | point number or double-precision |                      |                    |
-    |                            | floating point number)           |                      |                    |
-    +----------------------------+----------------------------------+----------------------+--------------------+
-    | **string**                 | **string**                       | TREE, BITSET or HASH | ‘A B C’            |
-    | (may also be called ‘str’) | (any set of octets,              |                      |                    |
-    |                            | up to the maximum length)        |                      | ‘\65 \66 \67’      |
-    +----------------------------+----------------------------------+----------------------+--------------------+
-    | **boolean**                | **bool**                         | TREE or HASH         | true               |
-    |                            | (true or false)                  |                      |                    |
-    +----------------------------+----------------------------------+----------------------+--------------------+
-    | **array**                  | **array**                        | RTREE                | {10, 11}           |
-    |                            | (list of numbers representing    |                      |                    |
-    |                            | points in a geometric figure)    |                      | {3, 5, 9, 10}      |
-    |                            |                                  |                      |                    |
-    +----------------------------+----------------------------------+----------------------+--------------------+
-    | **scalar**                 | **bool**                         | TREE or HASH         | true               |
-    |                            | (true or false)                  |                      |                    |
-    |                            |                                  |                      | -1                 |
-    |                            | **integer**                      |                      |                    |
-    |                            | (integer between                 |                      | 1.234              |
-    |                            | -9223372036854775808 and         |                      |                    |
-    |                            | 18446744073709551615)            |                      | ‘’                 |
-    |                            |                                  |                      |                    |
-    |                            | **double**                       |                      | ‘ру’               |
-    |                            | (single-precision floating       |                      |                    |
-    |                            | point number or double-precision |                      |                    |
-    |                            | floating point number)           |                      |                    |
-    |                            |                                  |                      |                    |
-    |                            | **string** (any set of octets)   |                      |                    |
-    |                            |                                  |                      |                    |
-    |                            | Note: When there is a mix of     |                      |                    |
-    |                            | types, the key order is:         |                      |                    |
-    |                            | booleans, then numbers,          |                      |                    |
-    |                            | then strings.                    |                      |                    |
-    +----------------------------+----------------------------------+----------------------+--------------------+
+.. _index-is_nullable:
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Null values
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Working with :ref:`null values <index-box_nil>` traditionally requires
+explanation.
+
+For all field types, you can insert a "null value" using:
+
+* Tarantool's ``box.NULL`` variable (the recommended option),
+  which is equivalent to MsgPack's :ref:`msgpack.NULL <msgpack-null>`
+  variable, or
+* Lua's ``nil`` (not recommended, because trailing nils can be truncated in Lua
+  before they reach Tarantool database).
+
+"Null values" can be used within **secondary TREE indexes**.
+To allow "null values" for specific fields in such an index, set
+``is_nullable=true`` in the index's :ref:`parts <box_index-parts>` option,
+e.g. when you create an index with
+:ref:`space_object:create_index() <box_space-create_index>`.
+Trailing "null values" also become legal in this case.
+
+Example:
+
+.. code-block:: tarantoolsession
+
+    tarantool> box.schema.space.create('tester')
+    tarantool> box.space.tester:create_index('I',{unique=true,parts={{1, 'number', is_nullable=false}}})
+    tarantool> box.space.tester:insert{ 1, box.NULL }
+    tarantool> box.space.tester:insert{ 2, msgpack.NULL }
+    tarantool> box.space.tester:insert{ 3, nil }
+    tarantool> box.space.tester:select()
+    ---
+    - - [1, null]
+      - [2, null]
+      - [3]
+    ...
+    tarantool> box.space.tester:create_index('J',{unique=true,parts={{1, 'number', is_nullable=false}, {2, 'number', is_nullable=true}}})
+    ---
+    - unique: true
+      parts:
+      - type: number
+        is_nullable: false
+        fieldno: 1
+      - type: number
+        is_nullable: true
+        fieldno: 2
+      id: 1
+      space_id: 512
+      name: J
+      type: TREE
+    ...
+    tarantool> box.space.tester:insert{ 3, nil}
+    tarantool> box.space.tester:select()
+    ---
+    - - [1, null]
+      - [2, null]
+      - [3, null]
+    ...
+
+"Null values" may appear multiple times even in a unique index.
+
+.. code-block:: lua
+
+    -- ???
+
+Within indexes, "null values" are always treated as equal to other "null values",
+and are always treated as less than non-null values. ??? less than negative?
+
+.. code-block:: lua
+
+    format =
+    {{'field1'},
+     {'field2'},
+     {'field3', is_nullable = true},
+     {'field4', is_nullable = true}}
+
+    t = space:insert{1, 2} -- ok
+
+    t.field1 == 1, t.field2 == 2, t.field3 == nil, t.field4 == nil
+
+.. _index-field_format:
+
+--------------------------------------------------------------------------------
+Field format
+--------------------------------------------------------------------------------
+
+Ordinarily Tarantool allows unnamed untyped fields.
+But if needed, you can specify **names and types**,
+for example to document that the 10th field in a tuple is the surname field
+and must contain strings.
+
+You can do this when you create a space with
+:ref:`box.schema.space.create() <box_schema-space_create>`,
+or later with :ref:`space_object:format() <box_space-format>`.
+In either case, you'll be using the ``format`` clause.
+
+The ``format`` clause contains ``{name='...',type='...'}`` pairs, where:
+
+* the name may be any string, provided that two fields do not have the
+  same name,
+* the type can be any of those allowed for
+  :ref:`indexed fields <index-box_indexed-field-types>`:
+  unsigned | string | integer | number | boolean | array | scalar.
+
+You can use ``format`` on a space that already has a format,
+provided that there is no conflict with existing data or index definitions.
+??? HOW TO UNSET A FORMAT?
+
+Also, it is legal for tuples to have more fields than are described by a
+``format`` clause. To constrain the number of fields, specify a space's
+:ref:`field_count <box_space-field_count>`.
+
+In this example, we have nearly 20 fields in a customer's record.
+With named fields, it becomes really easy to index and otherwise
+manage the data:
+
+.. code-block:: lua
+
+    local customer = box.schema.space.create('customer')
+        customer:format({
+            {'customer_id', 'integer'},
+            {'customer_database_id', 'string'},
+            {'account_number', 'string'},
+            {'macro_region_id', 'integer'},
+            {'branch_id', 'integer'},
+            {'branch_actual_date', dt_type},
+            {'macro_region_actual_date', dt_type},
+            {'customer_status_id', 'integer'},
+            {'customer_status_id_actual_date', dt_type},
+            {'rt_status', 'integer'},
+            {'rt_status_date', dt_type},
+            {'account_number_actual_date', dt_type},
+            {'customer_pay_type_id', 'integer'},
+            {'customer_pay_type_id_actual_date', dt_type},
+            {'contract_actual_date', dt_type},
+            {'payment_restrictions', 'array'},
+            {'payment_restrictions_actual_date', dt_type},
+            {'migration_info', 'array', is_nullable=true},
+            {'migration_info_actual_date', dt_type}
+        })
+        -- Create a primary key
+        customer:create_index('primary', {
+            parts = {'customer_id', 'macro_region_id'}
+        })
+        -- Select, update
+        ???
 
 .. _index-collation:
 
@@ -339,8 +432,8 @@ with Tarantool indexes.
 
 But if you want the ordering that you see in phone books and dictionaries,
 then you need Tarantool's **optional collations** -- ``unicode`` and
-``unicode_s1`` -- that allow for ``'A' < 'a' < 'B'`` and ``'A' = 'a' < 'B'``
-respectively.
+``unicode_ci`` -- that allow for ``'A' < 'a' < 'B'`` and ``'A' = 'a' < 'B'``
+respectively. ??? WHAT ARE COLLATION NAMES NOW?
 
 Optional collations use the ordering according to the
 `Default Unicode Collation Element Table (DUCET) <http://unicode.org/reports/tr10/#Default_Unicode_Collation_Element_Table>`_
@@ -350,21 +443,22 @@ The only difference between the two collations is about
 `weights <https://unicode.org/reports/tr10/#Weight_Level_Defn>`_:
 
 * ``unicode`` collation observes four weight levels, from L1 to L4,
-* ``unicode_s1`` collation observes only L1 weights.
+* ``unicode_ci`` collation observes only L1 weights, and so proves
+  case-insensitive.
 
 As an example, let's take some Russian words:
 
-  .. code-block:: text
+.. code-block:: text
 
-      'ЕЛЕ'
-      'елейный'
-      'ёлка'
-      'еловый'
-      'елозить'
-      'Ёлочка'
-      'ёлочный'
-      'ЕЛь'
-      'ель'
+    'ЕЛЕ'
+    'елейный'
+    'ёлка'
+    'еловый'
+    'елозить'
+    'Ёлочка'
+    'ёлочный'
+    'ЕЛь'
+    'ель'
 
 ...and show the difference in ordering and selecting by index:
 
@@ -391,11 +485,11 @@ As an example, let's take some Russian words:
       - []
       ...
 
-* with ``unicode_s1`` collation:
+* with ``unicode_ci`` collation:
 
   .. code-block:: tarantoolsession
 
-      tarantool> box.space.T:create_index('I', {parts = {{1,'str', collation='unicode_s1'}}})
+      tarantool> box.space.T:create_index('I', {parts = {{1,'str', collation='unicode_ci'}}})
       ...
       tarantool> box.space.S.index.I:select()
       ---
@@ -429,46 +523,9 @@ A **sequence** is a generator of ordered integer values.
 As with spaces and indexes, you should specify the sequence **name**, and let
 Tarantool come up with a unique **numeric identifier** ("sequence id").
 
-As well, you can specify several options when creating a new sequence.
+As well, you can specify several :ref:`options <index-box_sequence-options>`
+when creating a new sequence.
 The options determine what value will be generated whenever the sequence is used.
-
-.. _index-box_sequence-options:
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Options for ``box.schema.sequence.create()``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. container:: table
-
-    .. rst-class:: left-align-column-1
-    .. rst-class:: left-align-column-2
-    .. rst-class:: left-align-column-3
-    .. rst-class:: left-align-column-4
-    .. rst-class:: top-align-column-1
-
-    +----------------------------+----------------------------------+----------------------+--------------------+
-    | Option name                | Type and meaning                 | Default              | Examples           |
-    +============================+==================================+======================+====================+
-    | **start**                  | Integer. The value to generate   | 1                    | start=0            |
-    |                            | the first time a sequence is     |                      |                    |
-    |                            | used                             |                      |                    |
-    +----------------------------+----------------------------------+----------------------+--------------------+
-    | **min**                    | Integer. Values smaller than     | 1                    | min=-1000          |
-    |                            | this cannot be generated         |                      |                    |
-    +----------------------------+----------------------------------+----------------------+--------------------+
-    | **max**                    | Integer. Values larger than      | 9223372036854775807  | max=0              |
-    |                            | this cannot be generated         |                      |                    |
-    +----------------------------+----------------------------------+----------------------+--------------------+
-    | **cycle**                  | Boolean. Whether to start again  | false                | cycle=true         |
-    |                            | when values cannot be generated  |                      |                    |
-    +----------------------------+----------------------------------+----------------------+--------------------+
-    | **cache**                  | Integer. The number of values    | 0                    | cache=0            |
-    |                            | to store in a cache              |                      |                    |
-    +----------------------------+----------------------------------+----------------------+--------------------+
-    | **step**                   | Integer. What to add to the      | 1                    | step=-1            |
-    |                            | previous generated value, when   |                      |                    |
-    |                            | generating a new value           |                      |                    |
-    +----------------------------+----------------------------------+----------------------+--------------------+
 
 Once a sequence exists, it can be altered, dropped, reset, forced to generate
 the next value, or associated with an index.

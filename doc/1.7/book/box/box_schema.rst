@@ -160,11 +160,13 @@ Below is a list of all ``box.schema`` functions.
         |               | for authorization purposes                         |         |                     |
         +---------------+----------------------------------------------------+---------+---------------------+
         | format        | field names and types:                             | table   | (blank)             |
-        |               | See the illustrations of format clauses in the     |         |                     |
+        |               | See an overview in                                 |         |                     |
+        |               | :ref:`Field format <index-field_format>` section,  |         |                     |
+        |               | and details with more examples in reference on     |         |                     |
         |               | :ref:`space_object:format() <box_space-format>`    |         |                     |
-        |               | description and in the                             |         |                     |
+        |               | and                                                |         |                     |
         |               | :ref:`box.space._space <box_space-space>`          |         |                     |
-        |               | example. Optional and usually not specified.       |         |                     |
+        |               | Optional and usually not specified.                |         |                     |
         +---------------+----------------------------------------------------+---------+---------------------+
 
     There are three :ref:`syntax variations <app_server-object_reference>`
@@ -685,47 +687,62 @@ Here are the details for each function and option.
 
     :param string name: the name of the sequence
 
-    :param table options: see a quick overview in the
-                          "Options for ``box.schema.sequence.create()``"
-                          :ref:`chart <index-box_sequence-options>`
-                          (in the :ref:`Sequences <index-box_sequence>`
-                          section of the "Data model" chapter),
-                          and see more details below.
+    :param table options: see details below
 
-    :return: a reference to a new sequence object.
+    :return: a reference to a new sequence object
 
-    Options:
+    .. _index-box_sequence-options:
 
-    * ``start`` -- the STARTS WITH value. Type = integer, Default = 1.
+    **Options for ``box.schema.sequence.create()``**
 
-    * ``min`` -- the MINIMUM value. Type = integer, Default = 1.
+    .. container:: table
 
-    * ``max`` - the MAXIMUM value. Type = integer, Default = 9223372036854775807.
+        .. rst-class:: left-align-column-1
+        .. rst-class:: left-align-column-2
+        .. rst-class:: left-align-column-3
+        .. rst-class:: left-align-column-4
+        .. rst-class:: top-align-column-1
 
-      There is a rule: ``min`` <= ``start`` <= ``max``.
+        +----------------------------+----------------------------------+----------------------+--------------------+
+        | Option name                | Type and meaning                 | Default              | Examples           |
+        +============================+==================================+======================+====================+
+        | **start**                  | Integer. The value to generate   | 1                    | start=0            |
+        |                            | the first time a sequence is     |                      |                    |
+        |                            | used.                            |                      |                    |
+        +----------------------------+----------------------------------+----------------------+--------------------+
+        | **min**                    | Integer. Values smaller than     | 1                    | min=-1000          |
+        |                            | this cannot be generated.        |                      |                    |
+        +----------------------------+----------------------------------+----------------------+--------------------+
+        | **max**                    | Integer. Values larger than      | 9223372036854775807  | max=0              |
+        |                            | this cannot be generated.        |                      |                    |
+        +----------------------------+----------------------------------+----------------------+--------------------+
+        | **cycle**                  | Boolean. Whether to start again  | false                | cycle=true         |
+        |                            | when values cannot be generated. |                      |                    |
+        +----------------------------+----------------------------------+----------------------+--------------------+
+        | **cache** (unused,         | Integer. The number of values    | 0                    | cache=0            |
+        | reserved for future use)   | to store in a cache.             |                      |                    |
+        +----------------------------+----------------------------------+----------------------+--------------------+
+        | **step**                   | Integer. What to add to the      | 1                    | step=-1            |
+        |                            | previous generated value, when   |                      |                    |
+        |                            | generating a new value.          |                      |                    |
+        +----------------------------+----------------------------------+----------------------+--------------------+
+
+    The following rules apply:
+
+    * ``min`` <= ``start`` <= ``max``.
       For example it is illegal to say ``{start=0}`` because then the
       specified start value (0) would be less than the default min value (1).
 
-      There is a rule: ``min`` <= next-value <= ``max``.
+    * ``min`` <= next-value <= ``max``.
       For example, if the next generated value would be 1000,
       but the maximum value is 999, then that would be considered
       "overflow".
 
-    * ``cycle`` -- the CYCLE value. Type = bool. Default = false.
+    If the sequence generator's next value is an overflow number,
+    it causes an error return -- unless ``cycle == true``.
 
-      If the sequence generator's next value is an overflow number,
-      it causes an error return -- unless ``cycle == true``.
-
-      But if ``cycle == true``, the count is started again, at the
-      MINIMUM value or at the MAXIMUM value (not the STARTS WITH value).
-
-    * ``cache`` -- the CACHE value. Type = unsigned integer. Default = 0.
-
-      Currently Tarantool ignores this value, it is reserved for future use.
-
-    * ``step`` -- the INCREMENT BY value. Type = integer. Default = 1.
-
-      Ordinarily this is what is added to the previous value.
+    But if ``cycle == true``, the count is started again, at the
+    MINIMUM value or at the MAXIMUM value (not the STARTS WITH value).
 
 .. _box_schema-sequence_next:
 

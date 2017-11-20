@@ -9,8 +9,12 @@
 ===============================================================================
 
 The ``box.index`` submodule provides read-only access for index definitions and
-index keys. Indexes are contained in :samp:`box.space.{space-name}.index` array
-within each space object. They provide an API for ordered iteration over tuples.
+index keys.
+
+Indexes are created with
+:ref:`space_object:create_index() <box_space-create_index>` method
+and then contained in :samp:`space_object.index` array within each
+space object. They provide an API for ordered iteration over tuples.
 This API is a direct binding to corresponding methods of index objects of type
 ``box.index`` in the storage engine.
 
@@ -99,8 +103,10 @@ Below is a list of all ``box.index`` functions and members.
 
     .. data:: parts
 
-        An array describing the index fields. To learn more about the index field
-        types, refer to :ref:`this table <box_space-index_field_types>`.
+        An array describing the index fields:
+        :ref:`field type <index-box_indexed-field-types>`,
+        :ref:`is_nullable <index-is_nullable>` option, and
+        field number.
 
         :rtype: table
 
