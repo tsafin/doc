@@ -9,8 +9,8 @@ The ``box.stat`` submodule provides access to the request and network statistics
       requests since startup, broken down by request type.
     * Shows network activity statistics.
 
-To reset statistics of ``box.stat()``, ``box.stat.net()`` and
-:ref:`space index <box_space-space_index>`, use ``box.stat.reset()``.
+To reset statistics of ``box.stat()``, ``box.stat.net()``, ``box.info.vinyl()``
+and :ref:`space index <box_space-space_index>`, use ``box.stat.reset()``.
 
 .. code-block:: tarantoolsession
 
