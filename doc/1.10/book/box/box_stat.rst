@@ -5,14 +5,12 @@ Submodule `box.stat`
 --------------------------------------------------------------------------------
 
 The ``box.stat`` submodule provides access to the request and network statistics:
-
     * Shows the average number of requests per second, and the total number of
-    requests since startup, broken down by request type.
-
+      requests since startup, broken down by request type.
     * Shows network activity statistics.
 
 To reset statistics of ``box.stat()``, ``box.stat.net()`` and
-:ref:`space index <_box_space-space_index>`, use ``box.stat.reset()``.
+:ref:`space index <box_space-space_index>`, use ``box.stat.reset()``.
 
 .. code-block:: tarantoolsession
 
