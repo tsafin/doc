@@ -1,29 +1,8 @@
-.. _index-two_storage_engines:
+.. _index-comparison_diff:
 
-A storage engine is a set of very-low-level routines which actually store and
-retrieve tuple values. Tarantool offers a choice of two storage engines:
-
-* memtx (the in-memory storage engine) is the default and was the first to
-  arrive.
-
-* vinyl (the on-disk storage engine) is a working key-value engine and will
-  especially appeal to users who like to see data go directly to disk, so that
-  recovery time might be shorter and database size might be larger. On the other
-  hand, vinyl lacks some functions and options that are available with memtx.
-  Where that is the case, the relevant description in this manual will contain
-  a note beginning with the words "Note re storage engine". See also a coverage
-  for all :ref:`the differences between memtx and vinyl <vinyl_diff>` further
-  on this page.
-  
-To specify that the engine should be vinyl, add the clause ``engine = 'vinyl'``
-when creating a space, for example:
-``space = box.schema.space.create('name', {engine='vinyl'})``.
-
-.. _vinyl_diff:
-
---------------------------------------------------------------------------------
+================================================================================
         Differences between memtx and vinyl storage engines
---------------------------------------------------------------------------------
+================================================================================
 
 The primary difference between memtx and vinyl is that memtx is an "in-memory"
 engine while vinyl is an "on-disk" engine. An in-memory storage engine is
@@ -64,7 +43,7 @@ have been noted elsewhere in sentences that begin with the words
 * | With memtx, delete will return deleted tuple, if any.
   | With vinyl, delete will always return nil.
 
-It was explained :ref:`earlier <index-yields_must_happen>` that memtx does not
+It was explained earlier that memtx does not
 "yield" on a select request, it yields only on data-change requests. However,
 vinyl does yield on a select request, or on an equivalent such as ``get()`` or
 ``pairs()``. This has significance for
@@ -163,7 +142,7 @@ During the first 200,000 Set operations, inserted keys first go to the
 in-memory index. To maintain persistence, information about each Set
 operation is written to Tarantool's Write-ahead Log.
 
-.. image:: vinyl/i1.png
+.. image:: i1.png
     :align: center
     :alt: i1.png
 
@@ -183,14 +162,14 @@ The thread creates a second in-memory index. If there are Set operations taking
 place while the thread is working, their contention effect will be small because
 they will operate on the second in-memory index.
 
-.. image:: vinyl/i2.png
+.. image:: i2.png
     :align: center
     :alt: i2.png
 
 When the Run Creation Thread finishes the task, the first in-memory index is
 freed.
 
-.. image:: vinyl/i3.png
+.. image:: i3.png
     :align: center
     :alt: i3.png
 
@@ -202,7 +181,7 @@ Several times, the in-memory index becomes too large and a Run Creation
 Thread transfers the keys to a Run. The Runs have been appended to the
 end of db file. The number of created Runs becomes large.
 
-.. image:: vinyl/i4.png
+.. image:: i4.png
     :align: center
     :alt: i4.png
 
@@ -211,7 +190,7 @@ Runs reaches this maximum, the vinyl scheduler wakes a **Compaction Thread**
 for the db file. The Compaction Thread merges the keys in all the Runs, and
 creates one or more new db files.
 
-.. image:: vinyl/i5.png
+.. image:: i5.png
     :align: center
     :alt: i5.png
 
@@ -219,7 +198,7 @@ Now there are multiple pairs of in-memory indexes, and each pair has an
 associated db file. The combination of the in-memory indexes and the db file is
 called a **Range**, and the db file is called a **Range File**.
 
-.. image:: vinyl/i6.png
+.. image:: i6.png
     :align: center
     :alt: i6.png
 
@@ -243,7 +222,7 @@ c. a Write-Ahead Log file recording the Set operations, in the order they happen
 The number of Runs became too big, so the vinyl scheduler starts the
 Compaction Thread and creates two new Ranges.
 
-.. image:: vinyl/i7.png
+.. image:: i7.png
     :align: center
     :alt: i7.png
 
@@ -258,7 +237,7 @@ indexes, and these changes too will be merged.
 When the Compaction Thread finishes, the original Range is deleted, and
 information about the new Ranges is inserted into an in-memory **Range Index**.
 
-.. image:: vinyl/i8.png
+.. image:: i8.png
     :align: center
     :alt: i8.png
 
@@ -266,7 +245,7 @@ This Range Index is used for all Set operations and all searches. Since the Rang
 Index has the minimum and maximum key values that are in each Range, it is
 straightforward to scan it to find what Range would contain a particular key value.
 
-.. image:: vinyl/i9.png
+.. image:: i9.png
     :align: center
     :alt: i9.png
 
@@ -278,7 +257,7 @@ The final 300,000 Set operations take place; the background threads continue to
 create new Runs and do more Compactions. After the millionth insertion, the
 Database has four Ranges.
 
-.. image:: vinyl/i10.png
+.. image:: i10.png
     :align: center
     :alt: i10.png
 
@@ -305,7 +284,7 @@ designed to use these resources most efficiently:
 We will now start to read the million rows in the order that they were inserted,
 which was random.
 
-.. image:: vinyl/i12.png
+.. image:: i12.png
     :align: center
     :alt: i12.png
 
@@ -319,7 +298,7 @@ called "pages" or "blocks" in a B-tree. For each Run, there is a list of the
 Regions and their minimum/maximum key values - the Region Index - as well as
 some metadata.
 
-.. image:: vinyl/i13.png
+.. image:: i13.png
     :align: center
     :alt: i13.png
 
@@ -332,7 +311,7 @@ search. Also, it is impossible to maintain memory limits without doing a Run
 Creation process, because new Set operations might occur more quickly than the
 Compaction process can run.
 
-.. image:: vinyl/i14.png
+.. image:: i14.png
     :align: center
     :alt: i14.png
 
