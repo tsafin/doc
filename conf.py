@@ -15,6 +15,7 @@ master_doc = 'doc/1.9/index'
 
 extensions = [
     'sphinx.ext.todo',
+    'sphinx.ext.imgmath',
     'sphinx.ext.ifconfig',
     'sphinx.ext.intersphinx',
     'sphinx.ext.imgconverter',
