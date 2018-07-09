@@ -146,7 +146,7 @@ LSM tree:
 For example, an element corresponding to an insertion operation has, apart from
 a key and a value, an extra byte with an operation code (“REPLACE” in the image
 above). An element representing the deletion operation contains a key (since
-storing a value is unnecessary) and the corresponding operation code—“DELETE.”
+storing a value is unnecessary) and the corresponding operation code—“DELETE”.
 Also, each LSM tree element has a log sequence number (LSN), which is the value
 of a monotonically increasing sequence that uniquely identifies each operation.
 The whole tree is first ordered by key in ascending order, and then, within a
@@ -496,7 +496,7 @@ pages. The page size (in bytes) is controlled by the ``vinyl_page_size``
 parameter and can be set separately for each index. A page doesn’t have to be
 exactly of ``vinyl_page_size`` size—depending on the data it holds, it can be a
 little bit smaller or larger. Because of this, pages never have any empty space
-inside. Data is compressed by Facebook’s streaming algorithm called “zstd.” The
+inside. Data is compressed by Facebook’s streaming algorithm called “zstd”. The
 first key of each page, along with the page offset, is added to a “page index,”
 which is a separate file that allows the quick retrieval of any page. After a
 dump or compaction, the page index of the created run is also written to disk.
@@ -575,11 +575,11 @@ Caching
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 A lot of people think that caching is a silver bullet that can help with any
-performance issue. “When in doubt, add more cache.” In vinyl, caching is viewed
+performance issue. “When in doubt, add more cache”. In vinyl, caching is viewed
 rather as a means of reducing the overall workload and consequently, of getting
 a more stable response time for those requests that don’t hit the cache. vinyl
 boasts a unique type of cache among transactional systems called a “range tuple
-cache.” Unlike, say, RocksDB or MySQL, this cache doesn’t store pages, but
+cache”. Unlike, say, RocksDB or MySQL, this cache doesn’t store pages, but
 rather ranges of index values obtained  from disk, after having performed a
 compaction spanning all tree levels. This allows the use of caching for both
 single-key and key-range searches. Since this method of caching stores only hot
@@ -657,7 +657,7 @@ has a special metadata log that helps keep track of which run belongs to which
 subtree(s). This has the .vylog extension and its format is compatible with an
 .xlog file. Similarly to an .xlog file, the metadata log gets rotated at each
 checkpoint. To avoid the creation of extra runs with split and coalesce, we have
-also introduced an auxiliary entity called “slice.” It’s a reference to a run
+also introduced an auxiliary entity called “slice”. It’s a reference to a run
 containing a key range and it’s stored only in the metadata log. Once the
 reference counter drops to zero, the corresponding file gets removed. When it’s
 necessary to perform a split or to coalesce, Tarantool creates slice objects for
@@ -671,7 +671,7 @@ huge advantage of dividing all of the keys into ranges is the ability to
 independently control the L0 size as well as the dump and compaction processes
 for each subtree, which makes these processes manageable and predictable. Having
 a separate metadata log also simplifies the implementation of both :truncate”
-and “drop.” In vinyl, they’re processed instantly, since they only work with the
+and “drop”. In vinyl, they’re processed instantly, since they only work with the
 metadata log, while garbage collection is done in the background.
 
 .. _vinyl-advanced_features:
