@@ -38,7 +38,7 @@ in multithreaded DBMSes.
 .. figure:: vinyl/actor_threads.png
     :align: center
 
-*The Tarantool process consists of a fixed number of “actor” threads*
+*The Tarantool process consists of a fixed number of "actor" threads*
 
 If you design a database engine with cooperative multitasking in mind right from
 the start, it not only significantly speeds up the development process, but also
@@ -55,7 +55,7 @@ Algorithm
 Once the idea of using an existing library was off the table, we needed to pick
 an architecture to build upon. There are two competing approaches to on-disk
 data storage: the older one relies on B-trees and their variations; the newer
-one advocates the use of log-structured merge-trees, or “LSM” trees. MySQL,
+one advocates the use of log-structured merge-trees, or "LSM" trees. MySQL,
 PostgreSQL, and Oracle use B-trees, while Cassandra, MongoDB, and CockroachDB
 have adopted LSM trees.
 
@@ -112,7 +112,7 @@ still.
 
 Authors of specialized literature and blogs dedicated to on-disk data
 storage have coined two terms for these phenomena: extra reads are referred to
-as “read amplification” and writes as “write amplification”.
+as "read amplification" and writes as "write amplification".
 
 The amplification
 factor (multiplication coefficient) is calculated as the ratio of the size of
@@ -144,9 +144,9 @@ LSM tree:
 * Transactional log of all filesystem changes: vylog
 
 For example, an element corresponding to an insertion operation has, apart from
-a key and a value, an extra byte with an operation code (“REPLACE” in the image
+a key and a value, an extra byte with an operation code ("REPLACE" in the image
 above). An element representing the deletion operation contains a key (since
-storing a value is unnecessary) and the corresponding operation code—“DELETE”.
+storing a value is unnecessary) and the corresponding operation code—"DELETE".
 Also, each LSM tree element has a log sequence number (LSN), which is the value
 of a monotonically increasing sequence that uniquely identifies each operation.
 The whole tree is first ordered by key in ascending order, and then, within a
@@ -181,8 +181,8 @@ insertions are standard operations for the data structure underlying L0, so I
 won’t dwell on those.
 
 Sooner or later the number of elements in an LSM tree exceeds the L0 size and
-that’s when L0 gets written to a file on disk (called a “run”) and then cleared
-for storing new elements. This operation is called a “dump”.
+that’s when L0 gets written to a file on disk (called a "run") and then cleared
+for storing new elements. This operation is called a "dump".
 
 .. image:: vinyl/dumps.png
 
@@ -194,7 +194,7 @@ operations. Think of these runs as a pyramid, with the newest ones closer to the
 top. As runs keep getting dumped, the pyramid grows higher. Note that newer runs
 may contain deletions or replacements for existing keys. To remove older data,
 it’s necessary to perform garbage collection (this process is sometimes called
-“merge” or “compaction”) by combining several older runs into a new one. If two
+"merge" or "compaction") by combining several older runs into a new one. If two
 versions of the same key are encountered during a compaction, only the newer one
 is retained; however, if a key insertion is followed by a deletion, then both
 operations can be discarded.
@@ -305,7 +305,7 @@ all of the levels, starting from L0.
 Unfortunately, this scenario is quite common in real life. For example, when
 inserting a value into a tree, it’s necessary to make sure there are no
 duplicates among primary/unique keys. So to speed up membership checks, LSM
-trees use a probabilistic data structure called a “Bloom filter,” which will be
+trees use a probabilistic data structure called a "Bloom filter", which will be
 covered a bit later, in a section on how vinyl works under the hood.
 
 .. _vinyl-range_search:
@@ -316,7 +316,7 @@ Range searching
 
 In the case of a single-key search, the algorithm stops after encountering the
 first match. However, when searching within a certain key range (for example,
-looking for all the users with the last name “Ivanov”), it’s necessary to scan
+looking for all the users with the last name "Ivanov"), it’s necessary to scan
 all tree levels.
 
 .. image:: vinyl/range_search.png
@@ -338,7 +338,7 @@ Why would one store deletions? And why doesn’t it lead to a tree overflow in t
 case of for i=1,10000000 put(i) delete(i) end?
 
 With regards to lookups, deletions signal the absence of a value being searched;
-with compactions, they clear the tree of “garbage” records with older LSNs.
+with compactions, they clear the tree of "garbage" records with older LSNs.
 
 While the data is in RAM only, there’s no need to store deletions. Similarly,
 you don’t need to keep them following a compaction if they affect, among other
@@ -458,7 +458,7 @@ operation.
 * anticipatory dump
 * throttling
 
-The dump is performed from the so-called “shadow” L0 without blocking new
+The dump is performed from the so-called "shadow" L0 without blocking new
 insertions and lookups
 
 .. _vinyl-lsm_disadvantages_read_speed:
@@ -496,8 +496,8 @@ pages. The page size (in bytes) is controlled by the ``vinyl_page_size``
 parameter and can be set separately for each index. A page doesn’t have to be
 exactly of ``vinyl_page_size`` size—depending on the data it holds, it can be a
 little bit smaller or larger. Because of this, pages never have any empty space
-inside. Data is compressed by Facebook’s streaming algorithm called “zstd”. The
-first key of each page, along with the page offset, is added to a “page index,”
+inside. Data is compressed by Facebook’s streaming algorithm called "zstd". The
+first key of each page, along with the page offset, is added to a "page index",
 which is a separate file that allows the quick retrieval of any page. After a
 dump or compaction, the page index of the created run is also written to disk.
 All .index files are cached in RAM, which allows finding the necessary page with
@@ -525,20 +525,20 @@ unique index. If the data being inserted already exists, then inserting the same
 data into a unique index should lead to an error. The only way to throw an error
 in an LSM tree before a transaction is committed is to do a search before
 inserting the data. Such reads form a class of their own in the DBMS world and
-are called “hidden” or “parasitic” reads.
+are called "hidden" or "parasitic" reads.
 
 Another operation leading to hidden reads is updating a value in a field on
 which a secondary index is defined. Secondary keys are regular LSM trees that
 store differently ordered data. In most cases, in order not to have to store all
 of the data in all of the indexes, a value associated with a given key is kept
 in whole only in the primary index (any index that stores both a key and a value
-is called “covering” or “clustered”), whereas the secondary index only stores
+is called "covering" or "clustered"), whereas the secondary index only stores
 the fields on which a secondary index is defined, and the values of the fields
 that are part of the primary index. Thus, each time a change is made to a value
 in a field on which a secondary index is defined, it’s necessary to first remove
 the old key from the secondary index—and only then can the new key be inserted.
 At update time, the old value is unknown, and it is this value that needs to be
-read in from the primary key “under the hood”.
+read in from the primary key "under the hood".
 
 For example:
 
@@ -562,7 +562,7 @@ simultaneously occurring in all of the bit arrays is infinitesimal.
 
 The key advantage of Bloom filters in Tarantool is that they’re easily
 configurable. The only parameter that can be specified separately for each index
-is called ``bloom_fpr`` (FPR stands for “false positive ratio”) and it has the
+is called ``bloom_fpr`` (FPR stands for "false positive ratio") and it has the
 default value of 0.05, which translates to a 5% FPR. Based on this parameter,
 Tarantool automatically creates Bloom filters of the optimal size for partial-
 key and full-key searches. The Bloom filters are stored in the .index file,
@@ -575,11 +575,11 @@ Caching
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 A lot of people think that caching is a silver bullet that can help with any
-performance issue. “When in doubt, add more cache”. In vinyl, caching is viewed
+performance issue. "When in doubt, add more cache". In vinyl, caching is viewed
 rather as a means of reducing the overall workload and consequently, of getting
 a more stable response time for those requests that don’t hit the cache. vinyl
-boasts a unique type of cache among transactional systems called a “range tuple
-cache”. Unlike, say, RocksDB or MySQL, this cache doesn’t store pages, but
+boasts a unique type of cache among transactional systems called a "range tuple
+cache". Unlike, say, RocksDB or MySQL, this cache doesn’t store pages, but
 rather ranges of index values obtained  from disk, after having performed a
 compaction spanning all tree levels. This allows the use of caching for both
 single-key and key-range searches. Since this method of caching stores only hot
@@ -598,7 +598,7 @@ dopamine reward. Feel free to take a break, since working through the rest of
 the article is going to take some serious mental effort.
 
 An LSM tree in vinyl is just a small piece of the puzzle. Even with a single
-table (or so-called “space”), vinyl creates and maintains several LSM trees, one
+table (or so-called "space"), vinyl creates and maintains several LSM trees, one
 for each index. But even a single index can be comprised of dozens of LSM trees.
 Let’s try to understand why this might be necessary.
 
@@ -625,10 +625,10 @@ whereas most reads take place in a different region? How do you optimize the
 form of the LSM tree in this case? If it’s too high, read performance is
 impacted; if it’s too low—write speed is reduced.
 
-Tarantool “factorizes” this problem by creating multiple LSM trees for each
+Tarantool "factorizes" this problem by creating multiple LSM trees for each
 index. The approximate size of each subtree is controlled by the
 ``vinyl_range_size`` parameter, which is equal to 1 Gb by default. We call such
-subtrees “ranges”.
+subtrees "ranges".
 
 .. image:: vinyl/factor_lsm.png
 
@@ -641,14 +641,14 @@ Factorizing large LSM trees via ranging
 
 Initially, when the index has few elements, it consists of a single range. As it
 gets filled, its total volume may exceed ``vinyl_range_size``, in which case a
-special operation called “split” divides the tree into two equal parts. The tree
+special operation called "split" divides the tree into two equal parts. The tree
 is split at the middle element in the range of keys stored in the tree. For
 example, if  the tree initially stores the full range of -inf…+inf, then after
 splitting it at the middle key X, we get two subtrees: one that stores the range
 of -inf...X, and the other storing the range of X…+inf. With this approach, we
 always know which subtree to use for writes and which one for reads. If the tree
 contained deletions and each of the neighboring ranges grew smaller as a result,
-the opposite operation called “coalesce” combines two neighboring trees into
+the opposite operation called "coalesce" combines two neighboring trees into
 one.
 
 Split and coalesce don’t entail a compaction, the creation of new runs, or other
@@ -657,7 +657,7 @@ has a special metadata log that helps keep track of which run belongs to which
 subtree(s). This has the .vylog extension and its format is compatible with an
 .xlog file. Similarly to an .xlog file, the metadata log gets rotated at each
 checkpoint. To avoid the creation of extra runs with split and coalesce, we have
-also introduced an auxiliary entity called “slice”. It’s a reference to a run
+also introduced an auxiliary entity called "slice". It’s a reference to a run
 containing a key range and it’s stored only in the metadata log. Once the
 reference counter drops to zero, the corresponding file gets removed. When it’s
 necessary to perform a split or to coalesce, Tarantool creates slice objects for
@@ -670,8 +670,8 @@ subtrees is postponed until a compaction and then is performed automatically. A
 huge advantage of dividing all of the keys into ranges is the ability to
 independently control the L0 size as well as the dump and compaction processes
 for each subtree, which makes these processes manageable and predictable. Having
-a separate metadata log also simplifies the implementation of both :truncate”
-and “drop”. In vinyl, they’re processed instantly, since they only work with the
+a separate metadata log also simplifies the implementation of both "truncate"
+and "drop". In vinyl, they’re processed instantly, since they only work with the
 metadata log, while garbage collection is done in the background.
 
 .. _vinyl-advanced_features:
@@ -686,7 +686,7 @@ Advanced features of vinyl
 Upsert
 *******************************************************************************
 
-In the previous sections, I mentioned only two operations stored by an
+In the previous sections, we mentioned only two operations stored by an
 LSM tree: deletion and replacement. Let’s take a look at how all of the other
 operations can be represented. An insertion can be represented via a
 replacement—you just need to make sure there are no other elements with the
@@ -705,7 +705,7 @@ only a default value to be inserted if a key has no value yet, but also a list
 of update operations to perform if a value does exist.
 
 At transaction execution
-time, Tarantool just saves the operation in an LSM tree, then “executes” it
+time, Tarantool just saves the operation in an LSM tree, then "executes" it
 later, during a compaction.
 
 The upsert operation:
@@ -728,11 +728,11 @@ remove a field that doesn’t exist.
 A semantically similar operation exists in
 many products including PostgreSQL and MongoDB. But anywhere you look, it’s just
 syntactic sugar that combines the update and replace operations without avoiding
-hidden reads. I think the reason is that LSM trees as data storage structures
+hidden reads. Most probably, the reason is that LSM trees as data storage structures
 are relatively new.
 
 Even though an upsert is a very important optimization and
-implementing it cost us a lot of blood, sweat, and tears, I must admit that it
+implementing it cost us a lot of blood, sweat, and tears, we must admit that it
 has limited applicability. If a table contains secondary keys or triggers,
 hidden reads can’t be avoided. But if you have a scenario where secondary keys
 are not required and the update following the transaction completion will
@@ -740,7 +740,7 @@ certainly not cause any errors, then the operation is for you.
 
 I’d like to tell
 you a short story about an upsert. It takes place back when vinyl was only
-beginning to “mature” and we were using an upsert in production for the first
+beginning to "mature" and we were using an upsert in production for the first
 time. We had what seemed like an ideal environment for it: we had tons of keys,
 the current time was being used as values; update operations were inserting keys
 or modifying the current time; and we had few reads. Load tests yielded great
@@ -757,7 +757,7 @@ twice a day, so the database was idle for the most part, but there were much
 hotter keys with tens of thousands of updates per day. Tarantool handled those
 just fine. But in the case of lookups by key with tens of thousands of upserts,
 things quickly went downhill. To return the most recent value, Tarantool had to
-read and “replay” the whole history consisting of all of the upserts. When
+read and "replay" the whole history consisting of all of the upserts. When
 designing upserts, we had hoped this would happen automatically during a
 compaction, but the process never even got to that stage: the L0 size was more
 than enough, so there were no dumps.
@@ -783,7 +783,7 @@ garbage behind.
 
 |br|
 
-If secondary indexes are not unique, then collecting “garbage” from them can be
+If secondary indexes are not unique, then collecting "garbage" from them can be
 put off until a compaction, which is what we do in Tarantool. Transactions The
 append-only nature of LSM trees allowed us to implement full-blown serializable
 transactions in vinyl. Read-only requests use older versions of data without
@@ -796,18 +796,4 @@ of successful transactions by simply holding some of them on lock when
 necessary. We’re planning to improve the transaction manager soon. In the
 current release, we focused on making the algorithm behave 100% correctly and
 predictably. For example, our transaction manager is one of the few on the NoSQL
-market that supports so-called “gap locks”.
-
-.. _vinyl-conclusion:
-
--------------------------------------------------------------------------------
-Conclusion
--------------------------------------------------------------------------------
-
-In this article, I tried
-to describe how our on-disk storage engine works. Over its years of
-development, Tarantool has significantly evolved and is now being used not only
-by Mail.Ru Group, but by other IT companies. We also sell and maintain an
-Enterprise version of the product used by banks, telecoms, and the industrial
-sector. The stable version of Tarantool with vinyl has currently passed its
-trial by fire both at Mail.Ru Group and beyond, and is available for download.
+market that supports so-called "gap locks".
