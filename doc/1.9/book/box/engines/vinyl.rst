@@ -158,9 +158,9 @@ single key scope, by LSN in descending order.
 
 .. _engines-algorithm_filling_lsm:
 
-*******************************************************************************
+###############################################################################
 Filling an LSM tree
-*******************************************************************************
+###############################################################################
 
 Unlike a B-tree, which is stored completely on disk and can be partly cached in
 RAM, when using an LSM tree, memory is explicitly separated from disk right from
@@ -257,9 +257,9 @@ all of its operations.
 
 .. _vinyl-algorithm_form_control:
 
-*******************************************************************************
+###############################################################################
 Controlling the form of an LSM tree
-*******************************************************************************
+###############################################################################
 
 If it’s necessary to reduce the number of runs for lookups, then the run size
 ratio can be increased, thus bringing the number of levels down. If, on the
@@ -286,9 +286,9 @@ high as 150. Let’s try to figure out why this happens.
 
 .. _vinyl-algorithm_search:
 
-*******************************************************************************
+###############################################################################
 Search
-*******************************************************************************
+###############################################################################
 
 When doing a lookup in an LSM tree, what we need to find is not the element
 itself, but the most recent operation associated with it. If it’s a deletion,
@@ -330,9 +330,9 @@ procedure.
 
 .. _vinyl-range_search_deletion:
 
-*******************************************************************************
+###############################################################################
 Deletion
-*******************************************************************************
+###############################################################################
 
 Why would one store deletions? And why doesn’t it lead to a tree overflow in the
 case of for i=1,10000000 put(i) delete(i) end?
@@ -412,9 +412,9 @@ look at these disadvantages and how they’re dealt with in Tarantool.
 
 .. _vinyl-lsm_disadvantages_write_speed:
 
-*******************************************************************************
+###############################################################################
 Unpredictable write speed
-*******************************************************************************
+###############################################################################
 
 In an LSM tree, insertions almost always affect L0 only. How do you avoid idle
 time when the memory area allocated for L0 is full?
@@ -463,9 +463,9 @@ insertions and lookups
 
 .. _vinyl-lsm_disadvantages_read_speed:
 
-*******************************************************************************
+###############################################################################
 Unpredictable read speed
-*******************************************************************************
+###############################################################################
 
 Optimizing reads is the most difficult optimization task with regards to LSM
 trees. The main complexity factor here is the number of levels: any optimization
@@ -483,9 +483,9 @@ structures.
 
 .. _vinyl-lsm_disadvantages_compression:
 
-*******************************************************************************
+###############################################################################
 Compression and page index
-*******************************************************************************
+###############################################################################
 
 In B-trees, data compression is either the hardest problem to crack or a great
 marketing tool—rather than something really useful. In LSM trees, compression
@@ -542,7 +542,7 @@ read in from the primary key "under the hood".
 
 For example:
 
-.. code-block:: console
+.. code-block:: bash
 
     update t1 set city=’Moscow’ where id=1
 
@@ -589,9 +589,9 @@ in the most efficient way possible. The cache size is controlled by the
 
 .. _vinyl-lsm_disadvantages_gc:
 
-*******************************************************************************
+###############################################################################
 Garbage collection control
-*******************************************************************************
+###############################################################################
 
 Chances are that by now you’ve started losing focus and need a well-deserved
 dopamine reward. Feel free to take a break, since working through the rest of
@@ -682,9 +682,9 @@ Advanced features of vinyl
 
 .. _vinyl-advanced_features_upsert:
 
-*******************************************************************************
+###############################################################################
 Upsert
-*******************************************************************************
+###############################################################################
 
 In the previous sections, we mentioned only two operations stored by an
 LSM tree: deletion and replacement. Let’s take a look at how all of the other
@@ -710,7 +710,7 @@ later, during a compaction.
 
 The upsert operation:
 
-.. code-block:: console
+.. code-block:: bash
 
     space:upsert(tuple, {{operator, field, value}, ... })
 
@@ -769,9 +769,9 @@ with the read value.
 
 .. _vinyl-advanced_sec_keys:
 
-*******************************************************************************
+###############################################################################
 Secondary keys
-*******************************************************************************
+###############################################################################
 
 Update is not the only operation where
 optimizing hidden reads is critical. Even the replace operation, given secondary
