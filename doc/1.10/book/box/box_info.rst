@@ -43,7 +43,7 @@ variables.
 .. function:: box.info.memory()
 
     The **memory** function of ``box.info`` gives the ``admin`` user a
-    picture of the whole Tarantool instance. (Use ``box.info.vinyl()`` instead
+    picture of the whole Tarantool instance. (Use ``box.stat.vinyl()`` instead
     for a picture specifically of the vinyl subsystem.)
 
     * **memory().cache** -- number of bytes used for caching user data. The
