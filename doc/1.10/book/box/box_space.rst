@@ -452,7 +452,7 @@ Below is a list of all ``box.space`` functions and members.
     ``is_nullable`` values, or to call :ref:`space_object:format() <box_space-format>`
     with a different ``is_nullable`` value from what is used for an index. When there
     is a contradiction, the rule is: null is illegal unless ``is_nullable=true`` for
-    every index and for the space format.   
+    every index and for the space format.
 
     .. _box_space-field_names:
 
@@ -684,7 +684,10 @@ Below is a list of all ``box.space`` functions and members.
         If the format clause is omitted, then the returned value is the
         table that was used in a previous :samp:`{space_object}:format({format-clause})`
         invocation. For example, after ``box.space.tester:format({{'x','scalar'}})``,
-        ``box.space.tester:format()`` will return [{'name': 'x', 'type': 'scalar'}].
+        ``box.space.tester:format()`` will return ``[{'name': 'x', 'type': 'scalar'}]``.
+
+        **Note re storage engine:** vinyl supports formatting of non-empty
+        spaces. Primary index definition cannot be formatted.
 
     .. _box_space-frommap:
 
