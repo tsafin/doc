@@ -746,6 +746,8 @@ functions.
                          * O_WRONLY (write only), or
                          * O_RDWR (either read or write).
 
+                         Some of these flags are not available on non-Linux operating systems.
+
     :param number mode: Mode bits can be passed as a number or as string
                         constants, for example ``S_IWUSR``. Mode bits
                         are significant if flags include ``O_CREAT`` or
