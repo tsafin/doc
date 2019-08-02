@@ -34,7 +34,6 @@ This reference covers Tarantool's built-in Lua modules.
     json
     key_def
     log
-    merger
     msgpack
     net_box
     osmodule
