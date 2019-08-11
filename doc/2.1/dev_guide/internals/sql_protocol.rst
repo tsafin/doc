@@ -110,11 +110,7 @@ changed rows. For example, if the request is
 an SQL_INFO map with SQL_INFO_ROW_COUNT = 3.
 SQL_INFO_ROW_COUNT can be 0 for statements that do not change rows, such as CREATE TABLE.
 
-The SQL_INFO map may contain a second key -- SQL_INFO_AUTO_INCREMENT_IDS (1) -- which is the
-new primary-key value for an INSERT in a table defined with PRIMARY KEY
-AUTOINCREMENT.
-
-.. code-block:: none
+.. code-block::  none
 
     EXECUTE NOT-SELECT RESPONSE BODY:
 
@@ -129,3 +125,9 @@ AUTOINCREMENT.
     |                         +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+ |
     |                                                         |
     +=========================================================+
+
+The SQL_INFO map may contain a second key -- SQL_INFO_AUTO_INCREMENT_IDS (1) -- which is the
+new primary-key value for an INSERT in a table defined with PRIMARY KEY
+AUTOINCREMENT. In this case the MP_MAP will have two keys, and  one of the two keys
+will be 0x01: SQL_INFO_AUTO_INCREMENT_IDS, which is an MP_UINT number.
+
