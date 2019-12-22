@@ -1759,7 +1759,7 @@ Statements
 
 A statement consists of SQL-language keywords and expressions that direct Tarantool to do something with a database.
 Statements begin with one of the words
-ALTER ANALYZE COMMIT CREATE DELETE DROP EXPLAIN INSERT PRAGMA  RELEASE REPLACE ROLLBACK SAVEPOINT
+ALTER ANALYZE COMMIT CREATE DELETE DROP EXPLAIN INSERT PRAGMA RELEASE REPLACE ROLLBACK SAVEPOINT
 SELECT START TRUNCATE UPDATE VALUES WITH.
 Statements should end with ";" semicolon although this is not mandatory.
 
@@ -1916,8 +1916,8 @@ Rules:
   the table is created with that :ref:`storage engine <engines-chapter>`.
   When this clause is not specified,
   the table is created with the default engine,
-  which is ordinarily 'memtx' but may be changed with
-  :ref:`PRAGMA sql_default_engine(string); <sql_pragma>`.
+  which is ordinarily 'memtx' but may be changed
+  by updating a table that has a list of session settings.
 
 Actions:
 
@@ -4580,116 +4580,13 @@ When a string is used for searching, results must match according to a binary co
 
 ``PRAGMA;`` -- returns an incomplete list of pragmas and their current values.
 
-**Pragma statements that determnne behavior**
+**Pragma statements that determine behavior**
 
-.. container:: table
-
-    .. rst-class:: left-align-column-1
-    .. rst-class:: left-align-column-2
-    .. rst-class:: left-align-column-3
-
-    +---------------------------+-----------------+-----------------------------------------+
-    | Pragma                    | Parameter       | Effect                                  |
-    +===========================+=================+=========================================+
-    | count_changes             | treated as      | Determine whether to count for later    |
-    |                           | boolean,        | statements that change data. |br|       |
-    |                           | default = FALSE | ``PRAGMA count_changes();``             |
-    |                           | (0)             | -- without an argument -- returns the   |
-    |                           |                 | current setting.                        |
-    +---------------------------+-----------------+-----------------------------------------+
-    | defer_foreign_keys        | treated as      | No effect at this time                  |
-    |                           | boolean,        |                                         |                    
-    |                           | default = FALSE |                                         |
-    |                           | (0)             |                                         |
-    +---------------------------+-----------------+-----------------------------------------+
-    | full_column_names         | treated as      | No effect at this time                  |
-    |                           | boolean,        |                                         |                    
-    |                           | default = FALSE |                                         |
-    |                           | (0)             |                                         |
-    +---------------------------+-----------------+-----------------------------------------+
-    | parser_trace              | treated as      | Determine whether parser steps will be  |
-    |                           | boolean,        | shown for later statements. |br|        |
-    |                           | default = FALSE | ``PRAGMA parser_trace;`` -- without an  |
-    |                           | (0)             | argument -- returns the current         |
-    |                           |                 | setting.                                |
-    +---------------------------+-----------------+-----------------------------------------+
-    | recursive_triggers        | treated as      | Determine whether a triggered statement |
-    |                           | boolean,        | can activate a trigger. |br|            |
-    |                           | default = TRUE  | ``PRAGMA recursive_triggers;`` --       |
-    |                           | (1)             | without an argument -- returns the      |
-    |                           |                 | current setting.                        |
-    +---------------------------+-----------------+-----------------------------------------+
-    | reverse_unordered_selects | treated as      | Determine whether result rows are to be |
-    |                           | boolean,        | in reverse order if there is no ORDER   |
-    |                           | default = FALSE | clause. |br|                            |
-    |                           | (0)             | ``PRAGMA reverse_unordered_selects;``   |
-    |                           |                 | -- without an argument -- returns the   |
-    |                           |                 | current setting.                        |
-    +---------------------------+-----------------+-----------------------------------------+
-    | sql_compound_select_limit | integer,        | Determine the maximum number of UNION   |
-    |                           | default = 30,   | or EXCEPT or INTERSECT "table           |
-    |                           | maximum = 500   | operators" that a single statement may  |
-    |                           |                 | contain. |br|                           |
-    |                           |                 | ``PRAGMA sql_compound_select_limit`` -- |
-    |                           |                 | without an argument -- returns the      |
-    |                           |                 | current setting.                        |
-    +---------------------------+-----------------+-----------------------------------------+
-    | sql_default_engine        | string, either  | Determine what engine to use in later   |
-    |                           | ``'memtx'`` or  | CREATE TABLE statements. The choices    |
-    |                           | ``'vinyl'``,    | are 'memtx' and 'vinyl'. |br|           |
-    |                           | default =       | ``PRAGMA sql_default_engine;`` --       |
-    |                           | ``'memtx'``     | without an argument -- returns the      |
-    |                           |                 | current setting.                        |
-    +---------------------------+-----------------+-----------------------------------------+
-    | sql_trace                 | treated as      | Determine whether execution steps will  |
-    |                           | boolean,        | be shown during later statements. |br|  |
-    |                           | default = FALSE | ``PRAGMA sql_trace`` --                 |
-    |                           | (0)             | without an argument -- returns the      |
-    |                           |                 | current setting.                        |
-    +---------------------------+-----------------+-----------------------------------------+     
-    | select_trace              | treated as      | Determine whether execution steps will  |
-    |                           | boolean,        | be shown during later SELECT            |
-    |                           | default = FALSE | statements. |br|                        |
-    |                           | (0)             | ``PRAGMA select_trace`` --              |
-    |                           |                 | without an argument -- returns the      |
-    |                           |                 | current setting.                        |
-    +---------------------------+-----------------+-----------------------------------------+     
-    | short_column_names        | treated as      | No effect at this time                  |
-    |                           | boolean,        |                                         |                    
-    |                           | default = FALSE |                                         |
-    |                           | (0)             |                                         |
-    +---------------------------+-----------------+-----------------------------------------+
-    | vdbe_addoptrace           | treated as      | For use by Tarantool's developers       |
-    |                           | boolean,        |                                         |                    
-    |                           | default = FALSE |                                         |
-    |                           | (0)             |                                         |
-    +---------------------------+-----------------+-----------------------------------------+
-    | vdbe_debug                | treated as      | For use by Tarantool's developers       |
-    |                           | boolean,        |                                         |                    
-    |                           | default = FALSE |                                         |
-    |                           | (0)             |                                         |
-    +---------------------------+-----------------+-----------------------------------------+
-    | vdbe_eqp                  | treated as      | For use by Tarantool's developers       |
-    |                           | boolean,        |                                         |                    
-    |                           | default = FALSE |                                         |
-    |                           | (0)             |                                         |
-    +---------------------------+-----------------+-----------------------------------------+
-    | vdbe_listing              | treated as      | For use by Tarantool's developers       |
-    |                           | boolean,        |                                         |                    
-    |                           | default = FALSE |                                         |
-    |                           | (0)             |                                         |
-    +---------------------------+-----------------+-----------------------------------------+
-    | vdbe_trace                | treated as      | For use by Tarantool's developers       |
-    |                           | boolean,        |                                         |                    
-    |                           | default = FALSE |                                         |
-    |                           | (0)             |                                         |
-    +---------------------------+-----------------+-----------------------------------------+
-    | where_trace               | treated as      | For use by Tarantool's developers       |
-    |                           | boolean,        |                                         |                    
-    |                           | default = FALSE |                                         |
-    |                           | (0)             |                                         |
-    +---------------------------+-----------------+-----------------------------------------+
-
+In a forthcoming version, behavior change will be done by updating a system table,
+as described in `Issue#4511 <https://github.com/tarantool/tarantool/issues/4511>`_.
+Also one of the settings will be affected by
+`Issue#3792 <https://github.com/tarantool/tarantool/issues/3792>`_.
+Therefore use of PRAGMA for determining behavior is deprecated.
 
 **Pragma statements that display data about the data and the server performance**
 
@@ -4778,12 +4675,6 @@ Example: (not showing metadata)
      - [1, 's2', 'integer', 0, null, 0]
    ...
 
-
-Limitations:
-
-* Almost all PRAGMA statements change behavior for only the current session, but there is one exception: sql_compound_select_limit.
-* PRAGMA sql_compound_select_limit(...) is flawed so the name and behavior will change (`Issue#3792 <https://github.com/tarantool/tarantool/issues/3792>`_).
-* Syntax of many PRAGMA statements may change in the next version (`Issue#4511 <https://github.com/tarantool/tarantool/issues/4511>`_).
 
 .. _sql_explain:
 
@@ -5059,21 +4950,6 @@ Examples:
   * ``LENGTH(CAST('ДД' AS VARBINARY))`` is 4, the string has 4 bytes.
   * ``LENGTH(CHAR(0, 65))`` is 2, '\0' does not mean 'end of string'.
   * ``LENGTH(X'410041')`` is 3, X'...' byte sequences have type VARBINARY.
-
-.. _sql_function_like:
-
-***********************************************
-"LIKE"
-***********************************************
-
-Syntax:
-
-:samp:`"LIKE"({string-expression-1}, {string-expression-2} [, {string-expression-3}])`
-
-"LIKE"(a,b[,c]) -- notice the quote marks -- is equivalent to
-:ref:`b LIKE a [ESCAPE c] <sql_operator_like>`.
-
-Example: ``"LIKE"('%Rain','The Rain')`` is TRUE because Rain is in The Rain
 
 .. _sql_function_likelihood:
 
