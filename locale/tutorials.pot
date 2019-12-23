@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tarantool 2.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-22 14:30+0000\n"
+"POT-Creation-Date: 2019-12-23 10:44+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1455,14 +1455,14 @@ msgid "Indexed pattern search"
 msgstr ""
 
 #: ../doc/tutorials/lua_tutorials.rst:619
-msgid "Here is a generic function which takes a field identifier and a search pattern, and returns all tuples that match. |br| * The field must be the first field of a TREE index. |br| * The function will use `Lua pattern matching <http://www.lua.org/manual/5.2/manual.html#6.4.1>`_, which allows \"magic characters\" in regular expressions. |br| * The initial characters in the pattern, as far as the first magic character, will be used as an index search key. For each tuple that is found via the index, there will be a match of the whole pattern. |br| * To be :ref:`cooperative <atomic-cooperative_multitasking>`, the function should yield after every 10 tuples, unless there is a reason to delay yielding. |br| With this function, we can take advantage of Tarantool's indexes for speed, and take advantage of Lua's pattern matching for flexibility. It does everything that an SQL \"LIKE\" search can do, and far more."
+msgid "Here is a generic function which takes a field identifier and a search pattern, and returns all tuples that match. |br| * The field must be the first field of a TREE index. |br| * The function will use `Lua pattern matching <http://www.lua.org/manual/5.2/manual.html#6.4.1>`_, which allows \"magic characters\" in regular expressions. |br| * The initial characters in the pattern, as far as the first magic character, will be used as an index search key. For each tuple that is found via the index, there will be a match of the whole pattern. |br| * To be :ref:`cooperative <atomic-cooperative_multitasking>`, the function should yield after every 10 tuples, unless there is a reason to delay yielding. |br| With this function, we can take advantage of Tarantool's indexes for speed, and take advantage of Lua's pattern matching for flexibility. It does everything that an SQL :ref:`LIKE <sql_operator_like>` search can do, and far more."
 msgstr ""
 
-#: ../doc/tutorials/lua_tutorials.rst:636
+#: ../doc/tutorials/lua_tutorials.rst:637
 msgid "Read the following Lua code to see how it works. The comments that begin with \"SEE NOTE ...\" refer to long explanations that follow the code."
 msgstr ""
 
-#: ../doc/tutorials/lua_tutorials.rst:640
+#: ../doc/tutorials/lua_tutorials.rst:641
 msgid "function indexed_pattern_search(space_name, field_no, pattern)\n"
 "  -- SEE NOTE #1 \"FIND AN APPROPRIATE INDEX\"\n"
 "  if (box.space[space_name] == nil) then\n"
@@ -1553,47 +1553,47 @@ msgid "function indexed_pattern_search(space_name, field_no, pattern)\n"
 "end"
 msgstr ""
 
-#: ../doc/tutorials/lua_tutorials.rst:731
+#: ../doc/tutorials/lua_tutorials.rst:732
 msgid "NOTE #1 \"FIND AN APPROPRIATE INDEX\" |br| The caller has passed space_name (a string) and field_no (a number). The requirements are: |br| (a) index type must be \"TREE\" because for other index types (HASH, BITSET, RTREE) a search with :ref:`iterator=GE <box_index-iterator-types>` will not return strings in order by string value; |br| (b) field_no must be the first index part; |br| (c) the field must contain strings, because for other data types (such as \"unsigned\") pattern searches are not possible; |br| If these requirements are not met by any index, then print an error message and return nil."
 msgstr ""
 
-#: ../doc/tutorials/lua_tutorials.rst:743
+#: ../doc/tutorials/lua_tutorials.rst:744
 msgid "NOTE #2 \"DERIVE INDEX SEARCH KEY FROM PATTERN\" |br| The caller has passed pattern (a string). The index search key will be the characters in the pattern as far as the first magic character. Lua's magic characters are % ^ $ ( ) . [ ] * + - ?. For example, if the pattern is \"ABC.E\", the period is a magic character and therefore the index search key will be \"ABC\". But there is a complication ... If we see \"%\" followed by a punctuation character, that punctuation character is \"escaped\" so remove the \"%\" when making the index search key. For example, if the pattern is \"AB%$E\", the dollar sign is escaped and therefore the index search key will be \"AB$E\". Finally there is a check that the index search key length must be at least three -- this is an arbitrary number, and in fact zero would be okay, but short index search keys will cause long search times."
 msgstr ""
 
-#: ../doc/tutorials/lua_tutorials.rst:760
+#: ../doc/tutorials/lua_tutorials.rst:761
 msgid "NOTE #3 -- \"OUTER LOOP: INITIATE\" |br| The function's job is to return a result set, just as `box.space...select <box_space-select>` would. We will fill it within an outer loop that contains an inner loop. The outer loop's job is to execute the inner loop, and possibly :ref:`yield <atomic-threads_fibers_yields>`, until the search ends. The inner loop's job is to find tuples via the index, and put them in the result set if they match the pattern."
 msgstr ""
 
-#: ../doc/tutorials/lua_tutorials.rst:769
+#: ../doc/tutorials/lua_tutorials.rst:770
 msgid "NOTE #4 \"INNER LOOP: ITERATOR\" |br| The for loop here is using pairs(), see the :ref:`explanation of what index iterators are <box_index-index_pairs>`. Within the inner loop, there will be a local variable named \"tuple\" which contains the latest tuple found via the index search key."
 msgstr ""
 
-#: ../doc/tutorials/lua_tutorials.rst:776
+#: ../doc/tutorials/lua_tutorials.rst:777
 msgid "NOTE #5 \"INNER LOOP: BREAK IF INDEX KEY IS TOO GREAT\" |br| The iterator is GE (Greater or Equal), and we must be more specific: if the search index key has N characters, then the leftmost N characters of the result's index field must not be greater than the search index key. For example, if the search index key is 'ABC', then 'ABCDE' is a potential match, but 'ABD' is a signal that no more matches are possible."
 msgstr ""
 
-#: ../doc/tutorials/lua_tutorials.rst:785
+#: ../doc/tutorials/lua_tutorials.rst:786
 msgid "NOTE #6 \"INNER LOOP: BREAK AFTER EVERY 10 TUPLES -- MAYBE\" |br| This chunk of code is for cooperative multitasking. The number 10 is arbitrary, and usually a larger number would be okay. The simple rule would be \"after checking 10 tuples, yield, and then resume the search (that is, do the inner loop again) starting after the last value that was found\". However, if the index is non-unique or if there is more than one field in the index, then we might have duplicates -- for example {\"ABC\",1}, {\"ABC\", 2}, {\"ABC\", 3}\" -- and it would be difficult to decide which \"ABC\" tuple to resume with. Therefore, if the result's index field is the same as the previous result's index field, there is no break."
 msgstr ""
 
-#: ../doc/tutorials/lua_tutorials.rst:798
+#: ../doc/tutorials/lua_tutorials.rst:799
 msgid "NOTE #7 \"INNER LOOP: ADD TO RESULT SET IF PATTERN MATCHES\" |br| Compare the result's index field to the entire pattern. For example, suppose that the caller passed pattern \"ABC.E\" and there is an indexed field containing \"ABCDE\". Therefore the initial index search key is \"ABC\". Therefore a tuple containing an indexed field with \"ABCDE\" will be found by the iterator, because \"ABCDE\" > \"ABC\". In that case string.match will return a value which is not nil. Therefore this tuple can be added to the result set."
 msgstr ""
 
-#: ../doc/tutorials/lua_tutorials.rst:808
+#: ../doc/tutorials/lua_tutorials.rst:809
 msgid "NOTE #8 \"OUTER LOOP: BREAK, OR YIELD AND CONTINUE\" |br| There are three conditions which will cause a break from the inner loop: (1) the for loop ends naturally because there are no more index keys which are greater than or equal to the index search key, (2) the index key is too great as described in NOTE #5, (3) it is time for a yield as described in NOTE #6. If condition (1) or condition (2) is true, then there is nothing more to do, the outer loop ends too. If and only if condition (3) is true, the outer loop must yield and then continue. If it does continue, then the inner loop -- the iterator search -- will happen again with a new value for the index search key."
 msgstr ""
 
-#: ../doc/tutorials/lua_tutorials.rst:821
+#: ../doc/tutorials/lua_tutorials.rst:822
 msgid "EXAMPLE:"
 msgstr ""
 
-#: ../doc/tutorials/lua_tutorials.rst:823
+#: ../doc/tutorials/lua_tutorials.rst:824
 msgid "Start Tarantool, cut and paste the code for function ``indexed_pattern_search()``, and try the following:"
 msgstr ""
 
-#: ../doc/tutorials/lua_tutorials.rst:863
+#: ../doc/tutorials/lua_tutorials.rst:864
 msgid "box.space.t:drop()\n"
 "box.schema.space.create('t')\n"
 "box.space.t:create_index('primary',{})\n"
@@ -1609,7 +1609,7 @@ msgid "box.space.t:drop()\n"
 "indexed_pattern_search(\"t\", 2, \"ABC.E.\")"
 msgstr ""
 
-#: ../doc/tutorials/lua_tutorials.rst:843
+#: ../doc/tutorials/lua_tutorials.rst:844
 #: ../doc/tutorials/sql_tutorial.rst:116
 #: ../doc/tutorials/sql_tutorial.rst:136
 #: ../doc/tutorials/sql_tutorial.rst:200
@@ -1622,7 +1622,7 @@ msgstr ""
 msgid "The result will be:"
 msgstr ""
 
-#: ../doc/tutorials/lua_tutorials.rst:845
+#: ../doc/tutorials/lua_tutorials.rst:846
 msgid "tarantool> indexed_pattern_search(\"t\", 2, \"ABC.E.\")\n"
 "---\n"
 "- - [7, 'ABCDEF', 'a']\n"
