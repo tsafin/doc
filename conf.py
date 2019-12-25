@@ -33,9 +33,10 @@ source_suffix = '.rst'
 project = u'Tarantool'
 
 # |release| The full version, including alpha/beta/rc tags.
-release = "2.3.0"
+release = "2.3.1"
 # |version| The short X.Y version.
 version = '.'.join(release.split('.')[0:2])
+
 
 exclude_patterns = [
     '_build',
@@ -115,31 +116,31 @@ html_context = {
         'download/os-installation/1.6/freebsd' : True,
         'download/os-installation/1.6/os-x' : True,
         'download/os-installation/1.6/rhel-centos-6-7' : True,
-        # 1.10
-        'download/os-installation/1.10/ubuntu' : True,
-        'download/os-installation/1.10/amazon-linux' : True,
-        'download/os-installation/1.10/building-from-source' : True,
-        'download/os-installation/1.10/debian' : True,
-        'download/os-installation/1.10/docker-hub' : True,
-        'download/os-installation/1.10/fedora' : True,
-        'download/os-installation/1.10/freebsd' : True,
-        'download/os-installation/1.10/os-x' : True,
-        'download/os-installation/1.10/rhel-centos-6-7' : True,
-        'download/os-installation/1.10/snappy-package' : True,
-        # 2.2
-        'download/os-installation/2.2/ubuntu' : True,
-        'download/os-installation/2.2/amazon-linux' : True,
-        'download/os-installation/2.2/building-from-source' : True,
-        'download/os-installation/2.2/debian' : True,
-        'download/os-installation/2.2/docker-hub' : True,
-        'download/os-installation/2.2/fedora' : True,
-        'download/os-installation/2.2/freebsd' : True,
-        'download/os-installation/2.2/os-x' : True,
-        'download/os-installation/2.2/rhel-centos-6-7' : True,
-        'download/os-installation/2.2/snappy-package' : True
+        # 1.9
+        'download/os-installation/1.9/ubuntu' : True,
+        'download/os-installation/1.9/amazon-linux' : True,
+        'download/os-installation/1.9/building-from-source' : True,
+        'download/os-installation/1.9/debian' : True,
+        'download/os-installation/1.9/docker-hub' : True,
+        'download/os-installation/1.9/fedora' : True,
+        'download/os-installation/1.9/freebsd' : True,
+        'download/os-installation/1.9/os-x' : True,
+        'download/os-installation/1.9/rhel-centos-6-7' : True,
+        'download/os-installation/1.9/snappy-package' : True,
+        # 2.0
+        'download/os-installation/2.0/ubuntu' : True,
+        'download/os-installation/2.0/amazon-linux' : True,
+        'download/os-installation/2.0/building-from-source' : True,
+        'download/os-installation/2.0/debian' : True,
+        'download/os-installation/2.0/docker-hub' : True,
+        'download/os-installation/2.0/fedora' : True,
+        'download/os-installation/2.0/freebsd' : True,
+        'download/os-installation/2.0/os-x' : True,
+        'download/os-installation/2.0/rhel-centos-6-7' : True,
+        'download/os-installation/2.0/snappy-package' : True
     },
     'wp_local': True,
-    'versions': ['1.6', '1.10', '2.2'],
+    'versions': ['1.6', '1.10', '2.0'],
 }
 
 # Tarantool has extended Sphinx so that there are four new roles:
