@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Tarantool 2.3\n"
+"Project-Id-Version: Tarantool 2.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-12-23 12:11+0000\n"
+"POT-Creation-Date: 2019-12-23 11:49+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -49,141 +49,141 @@ msgid "A program for managing the build process. |br| For all platforms, this is
 msgstr ""
 
 #: ../doc/dev_guide/building_from_source.rst:25
-msgid "`ReadLine <http://www.gnu.org/software/readline/>`_ library, any version"
-msgstr ""
-
-#: ../doc/dev_guide/building_from_source.rst:26
-msgid "`ncurses <https://www.gnu.org/software/ncurses/>`_ library, any version"
+msgid "A build automation tool. |br| For all platforms this is ``GNU Make``."
 msgstr ""
 
 #: ../doc/dev_guide/building_from_source.rst:27
-msgid "`OpenSSL <https://www.openssl.org>`_ library, version 1.0.1+"
+msgid "`ReadLine <http://www.gnu.org/software/readline/>`_ library, any version"
 msgstr ""
 
 #: ../doc/dev_guide/building_from_source.rst:28
-msgid "`LibYAML <http://pyyaml.org/wiki/LibYAML>`_ library, version 0.1.4+"
+msgid "`ncurses <https://www.gnu.org/software/ncurses/>`_ library, any version"
 msgstr ""
 
 #: ../doc/dev_guide/building_from_source.rst:29
-msgid "`ICU <http://site.icu-project.org/download>`_ library, recent version"
+msgid "`OpenSSL <https://www.openssl.org>`_ library, version 1.0.1+"
 msgstr ""
 
 #: ../doc/dev_guide/building_from_source.rst:30
-msgid "`Autoconf <https://www.gnu.org/software/autoconf/>`_ library, any version"
+msgid "`ICU <http://site.icu-project.org/download>`_ library, recent version"
 msgstr ""
 
 #: ../doc/dev_guide/building_from_source.rst:31
-msgid "`Automake <https://www.gnu.org/software/automake/>`_ library, any version"
+msgid "`Autoconf <https://www.gnu.org/software/autoconf/>`_ library, any version"
 msgstr ""
 
 #: ../doc/dev_guide/building_from_source.rst:32
-msgid "`Libtool <https://www.gnu.org/software/libtool/>`_ library, any version"
+msgid "`Automake <https://www.gnu.org/software/automake/>`_ library, any version"
 msgstr ""
 
 #: ../doc/dev_guide/building_from_source.rst:33
+msgid "`Libtool <https://www.gnu.org/software/libtool/>`_ library, any version"
+msgstr ""
+
+#: ../doc/dev_guide/building_from_source.rst:34
 msgid "`Zlib-devel <https://www.zlib.net/>`_ library, any version"
 msgstr ""
 
-#: ../doc/dev_guide/building_from_source.rst:35
+#: ../doc/dev_guide/building_from_source.rst:36
 msgid "Python and modules. |br| Python interpreter is not necessary for building Tarantool itself, unless you intend to use the \"Run the test suite\" option in step 5. For all platforms, this is ``python`` version 2.7+ (but not 3.x). You need the following Python modules:"
 msgstr ""
 
-#: ../doc/dev_guide/building_from_source.rst:40
+#: ../doc/dev_guide/building_from_source.rst:41
 msgid "`pyyaml <https://pypi.python.org/pypi/PyYAML>`_ version 3.10"
 msgstr ""
 
-#: ../doc/dev_guide/building_from_source.rst:41
+#: ../doc/dev_guide/building_from_source.rst:42
 msgid "`argparse <https://pypi.python.org/pypi/argparse>`_ version 1.1"
 msgstr ""
 
-#: ../doc/dev_guide/building_from_source.rst:42
+#: ../doc/dev_guide/building_from_source.rst:43
 msgid "`msgpack-python <https://pypi.python.org/pypi/msgpack-python>`_ version 0.4.6"
 msgstr ""
 
-#: ../doc/dev_guide/building_from_source.rst:43
+#: ../doc/dev_guide/building_from_source.rst:44
 msgid "`gevent <https://pypi.python.org/pypi/gevent>`_ version 1.1.2"
 msgstr ""
 
-#: ../doc/dev_guide/building_from_source.rst:44
+#: ../doc/dev_guide/building_from_source.rst:45
 msgid "`six <https://pypi.python.org/pypi/six>`_ version 1.8.0"
 msgstr ""
 
-#: ../doc/dev_guide/building_from_source.rst:46
+#: ../doc/dev_guide/building_from_source.rst:47
 msgid "To install all required dependencies, follow the instructions for your OS:"
 msgstr ""
 
-#: ../doc/dev_guide/building_from_source.rst:48
+#: ../doc/dev_guide/building_from_source.rst:49
 msgid "For Debian/Ubuntu, say:"
 msgstr ""
 
-#: ../doc/dev_guide/building_from_source.rst:50
-msgid "$ apt install -y build-essential cmake coreutils sed \\\n"
+#: ../doc/dev_guide/building_from_source.rst:51
+msgid "$ apt install -y build-essential cmake make coreutils sed \\\n"
 "      autoconf automake libtool zlib1g-dev \\\n"
-"      libreadline-dev libncurses5-dev libyaml-dev libssl-dev \\\n"
+"      libreadline-dev libncurses5-dev libssl-dev \\\n"
 "      libunwind-dev libicu-dev \\\n"
 "      python python-pip python-setuptools python-dev \\\n"
 "      python-msgpack python-yaml python-argparse python-six python-gevent"
 msgstr ""
 
-#: ../doc/dev_guide/building_from_source.rst:59
+#: ../doc/dev_guide/building_from_source.rst:60
 msgid "For RHEL/CentOS/Fedora, say:"
 msgstr ""
 
-#: ../doc/dev_guide/building_from_source.rst:61
-msgid "$ yum install -y gcc gcc-c++ cmake coreutils sed \\\n"
+#: ../doc/dev_guide/building_from_source.rst:62
+msgid "$ yum install -y gcc gcc-c++ cmake make coreutils sed \\\n"
 "      autoconf automake libtool zlib-devel \\\n"
-"      readline-devel ncurses-devel libyaml-devel openssl-devel \\\n"
+"      readline-devel ncurses-devel openssl-devel \\\n"
 "      libunwind-devel libicu-devel \\\n"
 "      python python-pip python-setuptools python-devel \\\n"
 "      python-msgpack python-yaml python-argparse python-six python-gevent"
 msgstr ""
 
-#: ../doc/dev_guide/building_from_source.rst:70
+#: ../doc/dev_guide/building_from_source.rst:71
 msgid "For Mac OS X (instructions below are for OS X El Capitan):"
 msgstr ""
 
-#: ../doc/dev_guide/building_from_source.rst:72
+#: ../doc/dev_guide/building_from_source.rst:73
 msgid "If you're using Homebrew as your package manager, say:"
 msgstr ""
 
-#: ../doc/dev_guide/building_from_source.rst:74
-msgid "$ brew install cmake autoconf binutils zlib \\\n"
+#: ../doc/dev_guide/building_from_source.rst:75
+msgid "$ brew install cmake make autoconf binutils zlib \\\n"
 "       autoconf automake libtool \\\n"
-"       readline ncurses libyaml openssl libunwind-headers icu4c \\\n"
+"       readline ncurses openssl libunwind-headers icu4c \\\n"
 "       && pip install python-daemon \\\n"
 "       msgpack-python pyyaml configargparse six gevent"
 msgstr ""
 
-#: ../doc/dev_guide/building_from_source.rst:84
+#: ../doc/dev_guide/building_from_source.rst:85
 msgid "You can not install `zlib-devel <https://www.zlib.net/>`_  package this way."
 msgstr ""
 
-#: ../doc/dev_guide/building_from_source.rst:86
+#: ../doc/dev_guide/building_from_source.rst:87
 msgid "Alternatively, download Apple's default Xcode toolset:"
 msgstr ""
 
-#: ../doc/dev_guide/building_from_source.rst:88
+#: ../doc/dev_guide/building_from_source.rst:89
 msgid "$ xcode-select --install\n"
 "$ xcode-select -switch /Applications/Xcode.app/Contents/Developer"
 msgstr ""
 
-#: ../doc/dev_guide/building_from_source.rst:93
-msgid "For FreeBSD (instructions below are for FreeBSD 10.1 release), say:"
+#: ../doc/dev_guide/building_from_source.rst:94
+msgid "For FreeBSD (instructions below are for FreeBSD 10.1+ release), say:"
 msgstr ""
 
-#: ../doc/dev_guide/building_from_source.rst:95
+#: ../doc/dev_guide/building_from_source.rst:96
 msgid "$ pkg install -y sudo git cmake gmake gcc coreutils \\\n"
 "      autoconf automake libtool \\\n"
-"      readline ncurses libyaml openssl libunwind icu \\\n"
+"      readline ncurses openssl libunwind icu \\\n"
 "      python27 py27-pip py27-setuptools py27-daemon \\\n"
-"      py27-msgpack-python py27-yaml py27-argparse py27-six py27-gevent"
+"      py27-msgpack py27-yaml py27-argparse py27-six py27-gevent"
 msgstr ""
 
-#: ../doc/dev_guide/building_from_source.rst:103
+#: ../doc/dev_guide/building_from_source.rst:104
 msgid "If some Python modules are not available in a repository, it is best to set up the modules by getting a tarball and doing the setup with ``python setup.py`` like this:"
 msgstr ""
 
-#: ../doc/dev_guide/building_from_source.rst:107
+#: ../doc/dev_guide/building_from_source.rst:108
 msgid "$ # On some machines, this initial command may be necessary:\n"
 "$ wget https://bootstrap.pypa.io/ez_setup.py -O - | sudo python\n"
 "\n"
@@ -197,104 +197,109 @@ msgid "$ # On some machines, this initial command may be necessary:\n"
 "$ sudo python setup.py install"
 msgstr ""
 
-#: ../doc/dev_guide/building_from_source.rst:121
+#: ../doc/dev_guide/building_from_source.rst:122
 msgid "Finally, use Python ``pip`` to bring in Python packages that may not be up-to-date in the distro repositories. (On CentOS 7, it will be necessary to install ``pip`` first, with :code:`sudo yum install epel-release` followed by :code:`sudo yum install python-pip`.)"
 msgstr ""
 
-#: ../doc/dev_guide/building_from_source.rst:127
+#: ../doc/dev_guide/building_from_source.rst:128
 msgid "$ pip install -r \\\n"
 "      https://raw.githubusercontent.com/tarantool/test-run/master/requirements.txt \\\n"
 "      --user"
 msgstr ""
 
-#: ../doc/dev_guide/building_from_source.rst:133
+#: ../doc/dev_guide/building_from_source.rst:134
 msgid "This step is only necessary once, the first time you do a download."
 msgstr ""
 
-#: ../doc/dev_guide/building_from_source.rst:135
-msgid "Use ``git`` to download the latest Tarantool source code from the GitHub repository ``tarantool/tarantool``, branch 2.1, to a local directory named ``~/tarantool``, for example:"
+#: ../doc/dev_guide/building_from_source.rst:136
+msgid "Use ``git`` to download the latest Tarantool source code from the GitHub repository ``tarantool/tarantool``, branch 2.2, to a local directory named ``~/tarantool``, for example:"
 msgstr ""
 
-#: ../doc/dev_guide/building_from_source.rst:139
-msgid "$ git clone --recursive https://github.com/tarantool/tarantool.git -b 2.1 ~/tarantool"
+#: ../doc/dev_guide/building_from_source.rst:140
+msgid "$ git clone --recursive https://github.com/tarantool/tarantool.git -b 2.2 ~/tarantool"
 msgstr ""
 
-#: ../doc/dev_guide/building_from_source.rst:143
+#: ../doc/dev_guide/building_from_source.rst:144
 msgid "On rare occasions, the submodules need to be updated again with the command:"
 msgstr ""
 
-#: ../doc/dev_guide/building_from_source.rst:146
-msgid "$ git submodule update --init --recursive"
-msgstr ""
-
-#: ../doc/dev_guide/building_from_source.rst:150
-msgid "Use CMake to initiate the build."
+#: ../doc/dev_guide/building_from_source.rst:147
+msgid "cd ~/tarantool\n"
+"$ git submodule update --init --recursive"
 msgstr ""
 
 #: ../doc/dev_guide/building_from_source.rst:152
+msgid "Use CMake to initiate the build."
+msgstr ""
+
+#: ../doc/dev_guide/building_from_source.rst:154
 msgid "$ cd ~/tarantool\n"
 "$ make clean         # unnecessary, added for good luck\n"
 "$ rm CMakeCache.txt  # unnecessary, added for good luck\n"
 "$ cmake .            # start initiating with build type=Debug"
 msgstr ""
 
-#: ../doc/dev_guide/building_from_source.rst:159
+#: ../doc/dev_guide/building_from_source.rst:161
 msgid "On some platforms, it may be necessary to specify the C and C++ versions, for example:"
 msgstr ""
 
-#: ../doc/dev_guide/building_from_source.rst:162
+#: ../doc/dev_guide/building_from_source.rst:164
 msgid "$ CC=gcc-4.8 CXX=g++-4.8 cmake ."
 msgstr ""
 
-#: ../doc/dev_guide/building_from_source.rst:166
+#: ../doc/dev_guide/building_from_source.rst:168
 msgid "The CMake option for specifying build type is :samp:`-DCMAKE_BUILD_TYPE={type}`, where :samp:`{type}` can be:"
 msgstr ""
 
-#: ../doc/dev_guide/building_from_source.rst:169
+#: ../doc/dev_guide/building_from_source.rst:171
 msgid "``Debug`` -- used by project maintainers"
 msgstr ""
 
-#: ../doc/dev_guide/building_from_source.rst:170
+#: ../doc/dev_guide/building_from_source.rst:172
 msgid "``Release`` -- used only if the highest performance is required"
 msgstr ""
 
-#: ../doc/dev_guide/building_from_source.rst:171
+#: ../doc/dev_guide/building_from_source.rst:173
 msgid "``RelWithDebInfo`` -- used for production, also provides debugging capabilities"
 msgstr ""
 
-#: ../doc/dev_guide/building_from_source.rst:173
+#: ../doc/dev_guide/building_from_source.rst:175
 msgid "The CMake option for hinting that the result will be distributed is :code:`-DENABLE_DIST=ON`. If this option is on, then later ``make install`` will install ``tarantoolctl`` files in addition to ``tarantool`` files."
 msgstr ""
 
-#: ../doc/dev_guide/building_from_source.rst:177
+#: ../doc/dev_guide/building_from_source.rst:179
 msgid "Use ``make`` to complete the build."
 msgstr ""
 
-#: ../doc/dev_guide/building_from_source.rst:179
+#: ../doc/dev_guide/building_from_source.rst:181
 msgid "$ make"
 msgstr ""
 
-#: ../doc/dev_guide/building_from_source.rst:185
+#: ../doc/dev_guide/building_from_source.rst:187
 msgid "For FreeBSD, use ``gmake`` instead."
 msgstr ""
 
-#: ../doc/dev_guide/building_from_source.rst:187
+#: ../doc/dev_guide/building_from_source.rst:189
 msgid "This creates the 'tarantool' executable in the ``src/`` directory."
 msgstr ""
 
-#: ../doc/dev_guide/building_from_source.rst:189
+#: ../doc/dev_guide/building_from_source.rst:193
+msgid "If you encounter a ``curl`` or ``OpenSSL`` errors on this step try installing ``openssl111`` package of the specific ``1.1.1d`` version."
+msgstr ""
+
+#: ../doc/dev_guide/building_from_source.rst:196
 msgid "Next, it's highly recommended to say ``make install`` to install Tarantool to the ``/usr/local`` directory and keep your system clean. However, it is possible to run the Tarantool executable without installation."
 msgstr ""
 
-#: ../doc/dev_guide/building_from_source.rst:193
+#: ../doc/dev_guide/building_from_source.rst:200
 msgid "Run the test suite."
 msgstr ""
 
-#: ../doc/dev_guide/building_from_source.rst:195
+#: ../doc/dev_guide/building_from_source.rst:202
 msgid "This step is optional. Tarantool's developers always run the test suite before they publish new versions. You should run the test suite too, if you make any changes in the code. Assuming you downloaded to ``~/tarantool``, the principal steps are:"
 msgstr ""
 
-#: ../doc/dev_guide/building_from_source.rst:200
+#: ../doc/dev_guide/building_from_source.rst:207
 msgid "$ # make a subdirectory named `bin`\n"
 "$ mkdir ~/tarantool/bin\n"
 "\n"
@@ -308,11 +313,11 @@ msgid "$ # make a subdirectory named `bin`\n"
 "$ PATH=~/tarantool/bin:$PATH ./test-run.py"
 msgstr ""
 
-#: ../doc/dev_guide/building_from_source.rst:214
+#: ../doc/dev_guide/building_from_source.rst:221
 msgid "The output should contain reassuring reports, for example:"
 msgstr ""
 
-#: ../doc/dev_guide/building_from_source.rst:216
+#: ../doc/dev_guide/building_from_source.rst:223
 msgid "======================================================================\n"
 "TEST                                            RESULT\n"
 "------------------------------------------------------------\n"
@@ -325,28 +330,28 @@ msgid "======================================================================\n"
 "... etc."
 msgstr ""
 
-#: ../doc/dev_guide/building_from_source.rst:229
+#: ../doc/dev_guide/building_from_source.rst:236
 msgid "To prevent later confusion, clean up what's in the ``bin`` subdirectory:"
 msgstr ""
 
-#: ../doc/dev_guide/building_from_source.rst:231
+#: ../doc/dev_guide/building_from_source.rst:238
 msgid "$ rm ~/tarantool/bin/python\n"
 "$ rmdir ~/tarantool/bin"
 msgstr ""
 
-#: ../doc/dev_guide/building_from_source.rst:236
+#: ../doc/dev_guide/building_from_source.rst:243
 msgid "Make RPM and Debian packages."
 msgstr ""
 
-#: ../doc/dev_guide/building_from_source.rst:238
+#: ../doc/dev_guide/building_from_source.rst:245
 msgid "This step is optional. It's only for people who want to redistribute Tarantool. We highly recommend to use official packages from the `tarantool.org <https://tarantool.org/download.html>`_ web-site. However, you can build RPM and Debian packages using `PackPack <https://github.com/packpack/packpack>`_ or using the ``dpkg-buildpackage`` or ``rpmbuild`` tools. Please consult ``dpkg`` or ``rpmbuild`` documentation for details."
 msgstr ""
 
-#: ../doc/dev_guide/building_from_source.rst:246
-msgid "Verify your Tarantool installation."
+#: ../doc/dev_guide/building_from_source.rst:253
+msgid "Verify your Tarantool installation:"
 msgstr ""
 
-#: ../doc/dev_guide/building_from_source.rst:248
+#: ../doc/dev_guide/building_from_source.rst:255
 msgid "$ # if you installed tarantool locally after build\n"
 "$ tarantool\n"
 "$ # - OR -\n"
@@ -354,16 +359,16 @@ msgid "$ # if you installed tarantool locally after build\n"
 "$ ./src/tarantool"
 msgstr ""
 
-#: ../doc/dev_guide/building_from_source.rst:256
+#: ../doc/dev_guide/building_from_source.rst:263
 msgid "This starts Tarantool in the interactive mode."
 msgstr ""
 
-#: ../doc/dev_guide/building_from_source.rst:258
+#: ../doc/dev_guide/building_from_source.rst:265
 msgid "See also:"
 msgstr ""
 
-#: ../doc/dev_guide/building_from_source.rst:260
-msgid "`Tarantool README.md <https://github.com/tarantool/tarantool/blob/2.1/README.md>`_"
+#: ../doc/dev_guide/building_from_source.rst:267
+msgid "`Tarantool README.md <https://github.com/tarantool/tarantool/blob/2.2/README.md>`_"
 msgstr ""
 
 #: ../doc/dev_guide/c_style_guide.rst:3
@@ -1592,7 +1597,7 @@ msgid "How to submit a patch for review"
 msgstr ""
 
 #: ../doc/dev_guide/developer_guidelines.rst:114
-msgid "We don't accept GitHub pull requests. Instead, all patches should be sent as plain-text messages to tarantool-patches@freelists.org. Please subscribe to our mailing list at https://www.freelists.org/list/tarantool-patches to ensure that your messages are added to the archive."
+msgid "We don't accept GitHub pull requests. Instead, all patches should be sent as plain-text messages to tarantool-patches@dev.tarantool.org. Please subscribe to our mailing list at https://lists.tarantool.org/mailman/listinfo/tarantool-patches to ensure that your messages are added to the archive."
 msgstr ""
 
 #: ../doc/dev_guide/developer_guidelines.rst:120
@@ -1739,7 +1744,7 @@ msgid "Once configured, use the following command to send your patches:"
 msgstr ""
 
 #: ../doc/dev_guide/developer_guidelines.rst:236
-msgid "$ git send-email --to tarantool-patches@freelists.org 00*"
+msgid "$ git send-email --to tarantool-patches@dev.tarantool.org 00*"
 msgstr ""
 
 #: ../doc/dev_guide/developer_guidelines.rst:240
@@ -2145,7 +2150,7 @@ msgstr ""
 #: ../doc/dev_guide/internals/sql_protocol.rst:92
 #: ../doc/dev_guide/reference_capi/coio.rst:46
 #: ../doc/dev_guide/reference_capi/say.rst:52
-#: ../doc/dev_guide/reference_capi/tuple.rst:245
+#: ../doc/dev_guide/reference_capi/tuple.rst:241
 msgid "**Example:**"
 msgstr ""
 
@@ -2271,15 +2276,11 @@ msgstr ""
 msgid "**MP_BIN** - MsgPack binary format"
 msgstr ""
 
-#: ../doc/dev_guide/internals/box_protocol.rst:45
-msgid "**MP_BOOL** - true or false"
-msgstr ""
-
-#: ../doc/dev_guide/internals/box_protocol.rst:49
+#: ../doc/dev_guide/internals/box_protocol.rst:48
 msgid "Greeting packet"
 msgstr ""
 
-#: ../doc/dev_guide/internals/box_protocol.rst:51
+#: ../doc/dev_guide/internals/box_protocol.rst:50
 msgid "TARANTOOL'S GREETING:\n"
 "\n"
 "0                                     63\n"
@@ -2295,35 +2296,35 @@ msgid "TARANTOOL'S GREETING:\n"
 "64                  107              127"
 msgstr ""
 
-#: ../doc/dev_guide/internals/box_protocol.rst:67
+#: ../doc/dev_guide/internals/box_protocol.rst:66
 msgid "The server instance begins the dialogue by sending a fixed-size (128-byte) text greeting to the client. The greeting always contains two 64-byte lines of ASCII text, each line ending with a newline character (:code:`\\n`). The first line contains the instance version and protocol type. The second line contains up to 44 bytes of base64-encoded random string, to use in the authentication packet, and ends with up to 23 spaces."
 msgstr ""
 
-#: ../doc/dev_guide/internals/box_protocol.rst:77
+#: ../doc/dev_guide/internals/box_protocol.rst:76
 msgid "Unified packet structure"
 msgstr ""
 
-#: ../doc/dev_guide/internals/box_protocol.rst:79
+#: ../doc/dev_guide/internals/box_protocol.rst:78
 msgid "Once a greeting is read, the protocol becomes pure request/response and features a complete access to Tarantool functionality, including:"
 msgstr ""
 
-#: ../doc/dev_guide/internals/box_protocol.rst:82
+#: ../doc/dev_guide/internals/box_protocol.rst:81
 msgid "request multiplexing, e.g. ability to asynchronously issue multiple requests via the same connection"
 msgstr ""
 
-#: ../doc/dev_guide/internals/box_protocol.rst:84
+#: ../doc/dev_guide/internals/box_protocol.rst:83
 msgid "response format that supports zero-copy writes"
 msgstr ""
 
-#: ../doc/dev_guide/internals/box_protocol.rst:86
+#: ../doc/dev_guide/internals/box_protocol.rst:85
 msgid "The protocol uses `msgpack <http://msgpack.org>`_ for data structures and encoding."
 msgstr ""
 
-#: ../doc/dev_guide/internals/box_protocol.rst:89
+#: ../doc/dev_guide/internals/box_protocol.rst:88
 msgid "The protocol uses maps that contain some integer constants as keys. These constants are defined in `src/box/iproto_constants.h <https://github.com/tarantool/tarantool/blob/2.1/src/box/iproto_constants.h>`_. We list common constants here:"
 msgstr ""
 
-#: ../doc/dev_guide/internals/box_protocol.rst:94
+#: ../doc/dev_guide/internals/box_protocol.rst:93
 msgid "-- user keys\n"
 "<iproto_sync>          ::= 0x01\n"
 "<iproto_schema_id>     ::= 0x05  /* also known as schema_version */\n"
@@ -2345,7 +2346,7 @@ msgid "-- user keys\n"
 "<iproto_sql_info>      ::= 0x42"
 msgstr ""
 
-#: ../doc/dev_guide/internals/box_protocol.rst:116
+#: ../doc/dev_guide/internals/box_protocol.rst:115
 msgid "-- -- Value for <code> key in request can be:\n"
 "-- User command codes\n"
 "<iproto_select>         ::= 0x01\n"
@@ -2373,11 +2374,11 @@ msgid "-- -- Value for <code> key in request can be:\n"
 "<iproto_type_error>   ::= 0x8XXX /* where XXX is a value in errcode.h */"
 msgstr ""
 
-#: ../doc/dev_guide/internals/box_protocol.rst:144
+#: ../doc/dev_guide/internals/box_protocol.rst:143
 msgid "Both :code:`<header>` and :code:`<body>` are msgpack maps:"
 msgstr ""
 
-#: ../doc/dev_guide/internals/box_protocol.rst:146
+#: ../doc/dev_guide/internals/box_protocol.rst:145
 msgid "Request/Response:\n"
 "\n"
 "0        5\n"
@@ -2389,7 +2390,7 @@ msgid "Request/Response:\n"
 "  MP_INT       MP_MAP                     MP_MAP"
 msgstr ""
 
-#: ../doc/dev_guide/internals/box_protocol.rst:158
+#: ../doc/dev_guide/internals/box_protocol.rst:157
 msgid "UNIFIED HEADER:\n"
 "\n"
 "+================+================+=====================+\n"
@@ -2401,19 +2402,19 @@ msgid "UNIFIED HEADER:\n"
 "                          MP_MAP"
 msgstr ""
 
-#: ../doc/dev_guide/internals/box_protocol.rst:170
+#: ../doc/dev_guide/internals/box_protocol.rst:169
 msgid "They only differ in the allowed set of keys and values. The key defines the type of value that follows. If a body has no keys, the entire msgpack map for the body may be missing. Such is the case, for example, for a <ping> request. ``schema_id`` may be absent in the request's header, meaning that there will be no version checking, but it must be present in the response. If ``schema_id`` is sent in the header, then it will be checked."
 msgstr ""
 
-#: ../doc/dev_guide/internals/box_protocol.rst:181
+#: ../doc/dev_guide/internals/box_protocol.rst:180
 msgid "Authentication"
 msgstr ""
 
-#: ../doc/dev_guide/internals/box_protocol.rst:183
-msgid "When a client connects to the server instance, the instance responds with a 128-byte text greeting message. Part of the greeting is a base-64 encoded session salt - a random string which can be used for authentication. The length of the decoded salt (44 bytes) exceeds the amount necessary to sign the authentication message (first 20 bytes). An excess is reserved for future authentication schemas."
+#: ../doc/dev_guide/internals/box_protocol.rst:182
+msgid "When a client connects to the server instance, the instance responds with a 128-byte text greeting message. Part of the greeting is base-64 encoded session salt - a random string which can be used for authentication. The length of decoded salt (44 bytes) exceeds the amount necessary to sign the authentication message (first 20 bytes). An excess is reserved for future authentication schemas."
 msgstr ""
 
-#: ../doc/dev_guide/internals/box_protocol.rst:190
+#: ../doc/dev_guide/internals/box_protocol.rst:189
 msgid "PREPARE SCRAMBLE:\n"
 "\n"
 "    LEN(ENCODED_SALT) = 44;\n"
@@ -2441,19 +2442,19 @@ msgid "PREPARE SCRAMBLE:\n"
 "                        MP_MAP"
 msgstr ""
 
-#: ../doc/dev_guide/internals/box_protocol.rst:218
+#: ../doc/dev_guide/internals/box_protocol.rst:217
 msgid ":code:`<key>` holds the user name. :code:`<tuple>` must be an array of 2 fields: authentication mechanism (\"chap-sha1\" is the only supported mechanism right now) and password, encrypted according to the specified mechanism. Authentication in Tarantool is optional, if no authentication is performed, session user is 'guest'. The instance responds to authentication packet with a standard response with 0 tuples."
 msgstr ""
 
-#: ../doc/dev_guide/internals/box_protocol.rst:226
+#: ../doc/dev_guide/internals/box_protocol.rst:225
 msgid "Requests"
 msgstr ""
 
-#: ../doc/dev_guide/internals/box_protocol.rst:228
+#: ../doc/dev_guide/internals/box_protocol.rst:227
 msgid "SELECT: CODE - 0x01 Find tuples matching the search pattern"
 msgstr ""
 
-#: ../doc/dev_guide/internals/box_protocol.rst:231
+#: ../doc/dev_guide/internals/box_protocol.rst:230
 msgid "SELECT BODY:\n"
 "\n"
 "+==================+==================+==================+\n"
@@ -2470,15 +2471,15 @@ msgid "SELECT BODY:\n"
 "                          MP_MAP"
 msgstr ""
 
-#: ../doc/dev_guide/internals/box_protocol.rst:248
-msgid "INSERT:  CODE - 0x02 Insert tuple into the space, if no tuple with same unique key exists. Otherwise throw *duplicate key* error."
+#: ../doc/dev_guide/internals/box_protocol.rst:247
+msgid "INSERT:  CODE - 0x02 Inserts tuple into the space, if no tuple with same unique keys exists. Otherwise throw *duplicate key* error."
 msgstr ""
 
-#: ../doc/dev_guide/internals/box_protocol.rst:250
+#: ../doc/dev_guide/internals/box_protocol.rst:249
 msgid "REPLACE: CODE - 0x03 Insert a tuple into the space or replace an existing one."
 msgstr ""
 
-#: ../doc/dev_guide/internals/box_protocol.rst:253
+#: ../doc/dev_guide/internals/box_protocol.rst:252
 msgid "INSERT/REPLACE BODY:\n"
 "\n"
 "+==================+==================+\n"
@@ -2490,11 +2491,11 @@ msgid "INSERT/REPLACE BODY:\n"
 "                 MP_MAP"
 msgstr ""
 
-#: ../doc/dev_guide/internals/box_protocol.rst:266
+#: ../doc/dev_guide/internals/box_protocol.rst:265
 msgid "UPDATE: CODE - 0x04 Update a tuple"
 msgstr ""
 
-#: ../doc/dev_guide/internals/box_protocol.rst:269
+#: ../doc/dev_guide/internals/box_protocol.rst:268
 msgid "UPDATE BODY:\n"
 "\n"
 "+==================+=======================+\n"
@@ -2513,12 +2514,11 @@ msgid "UPDATE BODY:\n"
 "                 MP_MAP"
 msgstr ""
 
-#: ../doc/dev_guide/internals/box_protocol.rst:288
+#: ../doc/dev_guide/internals/box_protocol.rst:287
 msgid "OP:\n"
-"    Works only for numeric fields:\n"
+"    Works only for integer fields:\n"
 "    * Addition    OP = '+' . space[key][field_no] += argument\n"
 "    * Subtraction OP = '-' . space[key][field_no] -= argument\n"
-"    Works only for unsigned integer fields:\n"
 "    * Bitwise AND OP = '&' . space[key][field_no] &= argument\n"
 "    * Bitwise XOR OP = '^' . space[key][field_no] ^= argument\n"
 "    * Bitwise OR  OP = '|' . space[key][field_no] |= argument\n"
@@ -2535,6 +2535,10 @@ msgid "OP:\n"
 "|           |          |          |\n"
 "+-----------+==========+==========+\n"
 "              MP_ARRAY"
+msgstr ""
+
+#: ../doc/dev_guide/internals/box_protocol.rst:310
+msgid "Note that ``FIELD_NO`` is one based (starts from 1) unlike indices numbers which are usually zero based."
 msgstr ""
 
 #: ../doc/dev_guide/internals/box_protocol.rst:312
@@ -2623,7 +2627,7 @@ msgid "EVAL BODY:\n"
 msgstr ""
 
 #: ../doc/dev_guide/internals/box_protocol.rst:397
-msgid "UPSERT: CODE - 0x09 Update tuple. If it is found elsewhere, try to insert tuple. Always use primary index for key."
+msgid "UPSERT: CODE - 0x09 Update tuple if it would be found elsewhere try to insert tuple. Always use primary index for key."
 msgstr ""
 
 #: ../doc/dev_guide/internals/box_protocol.rst:400
@@ -2651,19 +2655,19 @@ msgid "UPSERT BODY:\n"
 "\n"
 "Supported operations:\n"
 "\n"
-"'+' - add a value to a numeric field. If the field is not numeric, it is\n"
+"'+' - add a value to a numeric field. If the filed is not numeric, it's\n"
 "      changed to 0 first. If the field does not exist, the operation is\n"
 "      skipped. There is no error in case of overflow either, the value\n"
 "      simply wraps around in C style. The range of the integer is MsgPack:\n"
 "      from -2^63 to 2^64-1\n"
 "'-' - same as the previous, but subtract a value\n"
-"'=' - assign a value to a field. The field must exist, if it does not exist,\n"
+"'=' - assign a field to a value. The field must exist, if it does not exist,\n"
 "      the operation is skipped.\n"
-"'!' - insert a field. It is only possible to insert a field if this creates no\n"
+"'!' - insert a field. It's only possible to insert a field if this create no\n"
 "      nil \"gaps\" between fields. E.g. it's possible to add a field between\n"
 "      existing fields or as the last field of the tuple.\n"
 "'#' - delete a field. If the field does not exist, the operation is skipped.\n"
-"      It is not possible to change with update operations a part of the primary\n"
+"      It's not possible to change with update operations a part of the primary\n"
 "      key (this is validated before performing upsert)."
 msgstr ""
 
@@ -2805,7 +2809,7 @@ msgid "JOIN:\n"
 "+================+\n"
 "      MP_MAP\n"
 "\n"
-"Then you must process every query that will came through other masters.\n"
+"Then you must process every query that'll came through other masters.\n"
 "Every request between masters will have Additional LSN and SERVER_ID."
 msgstr ""
 
@@ -3040,54 +3044,50 @@ msgid "Once again the startup procedure is initiated by the ``box.cfg{}`` reques
 msgstr ""
 
 #: ../doc/dev_guide/internals/replication_internals.rst:17
-msgid "*#1. If there is no snapshot .snap file and the 'replication' parameter is empty and cfg.read_only=false*: |br| then the local replica assumes it is an unreplicated \"standalone\" instance, or is the first replica of a new replica set. It will generate new UUIDs for itself and for the replica set. The replica UUID is stored in the ``_cluster`` space; the replica set UUID is stored in the ``_schema`` space. Since a snapshot contains all the data in all the spaces, that means the local replica's snapshot will contain the replica UUID and the replica set UUID. Therefore, when the local replica restarts on later occasions, it will be able to recover these UUIDs when it reads the .snap file."
+msgid "*#1. If there is no snapshot .snap file and the ``replication`` parameter is empty*: |br| then the local replica assumes it is an unreplicated \"standalone\" instance, or is the first replica of a new replica set. It will generate new UUIDs for itself and for the replica set. The replica UUID is stored in the ``_cluster`` space; the replica set UUID is stored in the ``_schema`` space. Since a snapshot contains all the data in all the spaces, that means the local replica's snapshot will contain the replica UUID and the replica set UUID. Therefore, when the local replica restarts on later occasions, it will be able to recover these UUIDs when it reads the .snap file."
 msgstr ""
 
 #: ../doc/dev_guide/internals/replication_internals.rst:27
-msgid "*#1a. If there is no snapshot .snap file and the 'replication' parameter is empty and cfg.read_only=true*: |br| When an instance is starting with ``box.cfg({... read_only = true})``, it cannot be the first replica of a new replica set because the first replica must be a master. Therefore an error message will occur: ER_BOOTSTRAP_READONLY. To avoid this, change the setting for this (local) instance to ``read_only = false``, or ensure that another (distant) instance starts first and has the local instance's UUID in its _cluster space. In the latter case, if ER_BOOTSTRAP_READONLY still occurs, set the local instance's :ref:`box.replication_connect_timeout <cfg_replication-replication_connect_timeout>` to a larger value."
+msgid "*#2. If there is no snapshot .snap file and the ``replication`` parameter is not empty and the ``_cluster`` space contains no other replica UUIDs*: |br| then the local replica assumes it is not a standalone instance, but is not yet part of a replica set. It must now join the replica set. It will send its replica UUID to the first distant replica which is listed in ``replication`` and which will act as a master. This is called the \"join request\". When a distant replica receives a join request, it will send back:"
 msgstr ""
 
-#: ../doc/dev_guide/internals/replication_internals.rst:38
-msgid "*#2. If there is no snapshot .snap file and the 'replication' parameter is not empty and the ``_cluster`` space contains no other replica UUIDs*: |br| then the local replica assumes it is not a standalone instance, but is not yet part of a replica set. It must now join the replica set. It will send its replica UUID to the first distant replica which is listed in ``replication`` and which will act as a master. This is called the \"join request\". When a distant replica receives a join request, it will send back:"
-msgstr ""
-
-#: ../doc/dev_guide/internals/replication_internals.rst:46
+#: ../doc/dev_guide/internals/replication_internals.rst:35
 msgid "the distant replica's replica set UUID,"
 msgstr ""
 
-#: ../doc/dev_guide/internals/replication_internals.rst:47
+#: ../doc/dev_guide/internals/replication_internals.rst:36
 msgid "the contents of the distant replica's .snap file. |br| When the local replica receives this information, it puts the replica set UUID in its ``_schema`` space, puts the distant replica's UUID and connection information in its ``_cluster`` space, and makes a snapshot containing all the data sent by the distant replica. Then, if the local replica has data in its WAL .xlog files, it sends that data to the distant replica. The distant replica will receive this and update its own copy of the data, and add the local replica's UUID to its ``_cluster`` space."
 msgstr ""
 
-#: ../doc/dev_guide/internals/replication_internals.rst:56
-msgid "*#3. If there is no snapshot .snap file and the 'replication' parameter is not empty and the ``_cluster`` space contains other replica UUIDs*: |br| then the local replica assumes it is not a standalone instance, and is already part of a replica set. It will send its replica UUID and replica set UUID to all the distant replicas which are listed in ``replication``. This is called the \"on-connect handshake\". When a distant replica receives an on-connect handshake: |br|"
+#: ../doc/dev_guide/internals/replication_internals.rst:45
+msgid "*#3. If there is no snapshot .snap file and the ``replication`` parameter is not empty and the ``_cluster`` space contains other replica UUIDs*: |br| then the local replica assumes it is not a standalone instance, and is already part of a replica set. It will send its replica UUID and replica set UUID to all the distant replicas which are listed in ``replication``. This is called the \"on-connect handshake\". When a distant replica receives an on-connect handshake: |br|"
 msgstr ""
 
-#: ../doc/dev_guide/internals/replication_internals.rst:63
+#: ../doc/dev_guide/internals/replication_internals.rst:52
 msgid "the distant replica compares its own copy of the replica set UUID to the one in the on-connect handshake. If there is no match, then the handshake fails and the local replica will display an error."
 msgstr ""
 
-#: ../doc/dev_guide/internals/replication_internals.rst:66
+#: ../doc/dev_guide/internals/replication_internals.rst:55
 msgid "the distant replica looks for a record of the connecting instance in its ``_cluster`` space. If there is none, then the handshake fails. |br| Otherwise the handshake is successful. The distant replica will read any new information from its own .snap and .xlog files, and send the new requests to the local replica."
 msgstr ""
 
-#: ../doc/dev_guide/internals/replication_internals.rst:72
+#: ../doc/dev_guide/internals/replication_internals.rst:61
 msgid "In the end ... the local replica knows what replica set it belongs to, the distant replica knows that the local replica is a member of the replica set, and both replicas have the same database contents."
 msgstr ""
 
-#: ../doc/dev_guide/internals/replication_internals.rst:78
+#: ../doc/dev_guide/internals/replication_internals.rst:67
 msgid "*#4. If there is a snapshot file and replication source is not empty*: |br| first the local replica goes through the recovery process described in the previous section, using its own .snap and .xlog files. Then it sends a \"subscribe\" request to all the other replicas of the replica set. The subscribe request contains the server vector clock. The vector clock has a collection of pairs 'server id, lsn' for every replica in the ``_cluster`` system space. Each distant replica, upon receiving a subscribe request, will read its .xlog files' requests and send them to the local replica if (lsn of .xlog file request) is greater than (lsn of the vector clock in the subscribe request). After all the other replicas of the replica set have responded to the local replica's subscribe request, the replica startup is complete."
 msgstr ""
 
-#: ../doc/dev_guide/internals/replication_internals.rst:90
+#: ../doc/dev_guide/internals/replication_internals.rst:79
 msgid "The following temporary limitations apply for versions 1.7 and 2.1:"
 msgstr ""
 
-#: ../doc/dev_guide/internals/replication_internals.rst:92
+#: ../doc/dev_guide/internals/replication_internals.rst:81
 msgid "The URIs in the ``replication`` parameter should all be in the same order on all replicas. This is not mandatory but is an aid to consistency."
 msgstr ""
 
-#: ../doc/dev_guide/internals/replication_internals.rst:94
+#: ../doc/dev_guide/internals/replication_internals.rst:83
 msgid "The maximum number of entries in the ``_cluster`` space is 32. Tuples for out-of-date replicas are not automatically re-used, so if this 32-replica limit is reached, users may have to reorganize the ``_cluster`` space manually."
 msgstr ""
 
@@ -5403,13 +5403,13 @@ msgid "Returned object is valid until the next yield."
 msgstr ""
 
 #: ../doc/dev_guide/reference_capi/box_index.rst:237
-#: ../doc/dev_guide/reference_capi/tuple.rst:173
+#: ../doc/dev_guide/reference_capi/tuple.rst:169
 msgid "key definition on success"
 msgstr ""
 
 #: ../doc/dev_guide/reference_capi/box_index.rst:238
-#: ../doc/dev_guide/reference_capi/tuple.rst:174
-#: ../doc/dev_guide/reference_capi/tuple.rst:192
+#: ../doc/dev_guide/reference_capi/tuple.rst:170
+#: ../doc/dev_guide/reference_capi/tuple.rst:188
 msgid "NULL on error"
 msgstr ""
 
@@ -6259,145 +6259,145 @@ msgstr ""
 msgid "msgpack otherwise"
 msgstr ""
 
-#: ../doc/dev_guide/reference_capi/tuple.rst:151
+#: ../doc/dev_guide/reference_capi/tuple.rst:147
 msgid "Possible data types for tuple fields."
 msgstr ""
 
-#: ../doc/dev_guide/reference_capi/tuple.rst:153
+#: ../doc/dev_guide/reference_capi/tuple.rst:149
 msgid "One cannot use STRS/ENUM macros for types because there is a mismatch between enum name (STRING) and type name literal (\"STR\"). STR is already used as a type in Objective C."
 msgstr ""
 
-#: ../doc/dev_guide/reference_capi/tuple.rst:161
+#: ../doc/dev_guide/reference_capi/tuple.rst:157
 msgid "Key definition"
 msgstr ""
 
-#: ../doc/dev_guide/reference_capi/tuple.rst:165
+#: ../doc/dev_guide/reference_capi/tuple.rst:161
 msgid "Create a key definition with the key fields with passed types on passed positions."
 msgstr ""
 
-#: ../doc/dev_guide/reference_capi/tuple.rst:167
+#: ../doc/dev_guide/reference_capi/tuple.rst:163
 msgid "May be used for tuple format creation and/or tuple comparison."
 msgstr ""
 
-#: ../doc/dev_guide/reference_capi/tuple.rst:169
+#: ../doc/dev_guide/reference_capi/tuple.rst:165
 msgid "array with key field identifiers"
 msgstr ""
 
-#: ../doc/dev_guide/reference_capi/tuple.rst:170
+#: ../doc/dev_guide/reference_capi/tuple.rst:166
 msgid "array with key :ref:`field types <capi-tuple_field_type>`"
 msgstr ""
 
-#: ../doc/dev_guide/reference_capi/tuple.rst:171
+#: ../doc/dev_guide/reference_capi/tuple.rst:167
 msgid "the number of key fields"
 msgstr ""
 
-#: ../doc/dev_guide/reference_capi/tuple.rst:178
+#: ../doc/dev_guide/reference_capi/tuple.rst:174
 msgid "Delete a key definition"
 msgstr ""
 
-#: ../doc/dev_guide/reference_capi/tuple.rst:180
+#: ../doc/dev_guide/reference_capi/tuple.rst:176
 msgid "key definition to delete"
 msgstr ""
 
-#: ../doc/dev_guide/reference_capi/tuple.rst:186
+#: ../doc/dev_guide/reference_capi/tuple.rst:182
 msgid "Return new in-memory tuple format based on passed key definitions"
 msgstr ""
 
-#: ../doc/dev_guide/reference_capi/tuple.rst:188
+#: ../doc/dev_guide/reference_capi/tuple.rst:184
 msgid "array of keys defined for the format"
 msgstr ""
 
-#: ../doc/dev_guide/reference_capi/tuple.rst:189
+#: ../doc/dev_guide/reference_capi/tuple.rst:185
 msgid "count of keys"
 msgstr ""
 
-#: ../doc/dev_guide/reference_capi/tuple.rst:191
+#: ../doc/dev_guide/reference_capi/tuple.rst:187
 msgid "new tuple format on success"
 msgstr ""
 
-#: ../doc/dev_guide/reference_capi/tuple.rst:196
+#: ../doc/dev_guide/reference_capi/tuple.rst:192
 msgid "Increment tuple format reference count"
 msgstr ""
 
-#: ../doc/dev_guide/reference_capi/tuple.rst:198
+#: ../doc/dev_guide/reference_capi/tuple.rst:194
 msgid "tuple format to ref"
 msgstr ""
 
-#: ../doc/dev_guide/reference_capi/tuple.rst:202
+#: ../doc/dev_guide/reference_capi/tuple.rst:198
 msgid "Decrement tuple format reference count"
 msgstr ""
 
-#: ../doc/dev_guide/reference_capi/tuple.rst:204
+#: ../doc/dev_guide/reference_capi/tuple.rst:200
 msgid "tuple format to unref"
 msgstr ""
 
-#: ../doc/dev_guide/reference_capi/tuple.rst:210
+#: ../doc/dev_guide/reference_capi/tuple.rst:206
 msgid "Compare tuples using key definition"
 msgstr ""
 
-#: ../doc/dev_guide/reference_capi/tuple.rst:212
+#: ../doc/dev_guide/reference_capi/tuple.rst:208
 msgid "the first tuple"
 msgstr ""
 
-#: ../doc/dev_guide/reference_capi/tuple.rst:213
+#: ../doc/dev_guide/reference_capi/tuple.rst:209
 msgid "the second tuple"
 msgstr ""
 
-#: ../doc/dev_guide/reference_capi/tuple.rst:214
-#: ../doc/dev_guide/reference_capi/tuple.rst:228
+#: ../doc/dev_guide/reference_capi/tuple.rst:210
+#: ../doc/dev_guide/reference_capi/tuple.rst:224
 msgid "key definition"
 msgstr ""
 
-#: ../doc/dev_guide/reference_capi/tuple.rst:216
+#: ../doc/dev_guide/reference_capi/tuple.rst:212
 msgid "0  if ``key_fields(tuple_a)`` == ``key_fields(tuple_b)``"
 msgstr ""
 
-#: ../doc/dev_guide/reference_capi/tuple.rst:217
+#: ../doc/dev_guide/reference_capi/tuple.rst:213
 msgid "<0 if ``key_fields(tuple_a)`` < ``key_fields(tuple_b)``"
 msgstr ""
 
-#: ../doc/dev_guide/reference_capi/tuple.rst:218
+#: ../doc/dev_guide/reference_capi/tuple.rst:214
 msgid ">0 if ``key_fields(tuple_a)`` > ``key_fields(tuple_b)``"
 msgstr ""
 
-#: ../doc/dev_guide/reference_capi/tuple.rst:220
-#: ../doc/dev_guide/reference_capi/tuple.rst:234
+#: ../doc/dev_guide/reference_capi/tuple.rst:216
+#: ../doc/dev_guide/reference_capi/tuple.rst:230
 msgid "See also: enum :ref:`field_type <capi-tuple_field_type>`"
 msgstr ""
 
-#: ../doc/dev_guide/reference_capi/tuple.rst:224
+#: ../doc/dev_guide/reference_capi/tuple.rst:220
 msgid "Compare a tuple with a key using key definition"
 msgstr ""
 
-#: ../doc/dev_guide/reference_capi/tuple.rst:226
+#: ../doc/dev_guide/reference_capi/tuple.rst:222
 msgid "tuple"
 msgstr ""
 
-#: ../doc/dev_guide/reference_capi/tuple.rst:227
+#: ../doc/dev_guide/reference_capi/tuple.rst:223
 msgid "key with MessagePack array header"
 msgstr ""
 
-#: ../doc/dev_guide/reference_capi/tuple.rst:230
+#: ../doc/dev_guide/reference_capi/tuple.rst:226
 msgid "0  if ``key_fields(tuple)`` == ``parts(key)``"
 msgstr ""
 
-#: ../doc/dev_guide/reference_capi/tuple.rst:231
+#: ../doc/dev_guide/reference_capi/tuple.rst:227
 msgid "<0 if ``key_fields(tuple)`` < ``parts(key)``"
 msgstr ""
 
-#: ../doc/dev_guide/reference_capi/tuple.rst:232
+#: ../doc/dev_guide/reference_capi/tuple.rst:228
 msgid ">0 if ``key_fields(tuple)`` > ``parts(key)``"
 msgstr ""
 
-#: ../doc/dev_guide/reference_capi/tuple.rst:238
+#: ../doc/dev_guide/reference_capi/tuple.rst:234
 msgid "Tuple iterator"
 msgstr ""
 
-#: ../doc/dev_guide/reference_capi/tuple.rst:242
+#: ../doc/dev_guide/reference_capi/tuple.rst:238
 msgid "Allocate and initialize a new tuple iterator. The tuple iterator allows iterating over fields at the root level of a MsgPack array."
 msgstr ""
 
-#: ../doc/dev_guide/reference_capi/tuple.rst:247
+#: ../doc/dev_guide/reference_capi/tuple.rst:243
 msgid "box_tuple_iterator_t* it = box_tuple_iterator(tuple);\n"
 "if (it == NULL) {\n"
 "    // error handling using box_error_last()\n"
@@ -6418,78 +6418,78 @@ msgid "box_tuple_iterator_t* it = box_tuple_iterator(tuple);\n"
 "box_iterator_free(it);"
 msgstr ""
 
-#: ../doc/dev_guide/reference_capi/tuple.rst:270
+#: ../doc/dev_guide/reference_capi/tuple.rst:266
 msgid "Destroy and free tuple iterator"
 msgstr ""
 
-#: ../doc/dev_guide/reference_capi/tuple.rst:276
+#: ../doc/dev_guide/reference_capi/tuple.rst:272
 msgid "Return zero-based next position in iterator. That is, this function returnы the field id of the field that will be returned by the next call to :ref:`box_tuple_next()<c_api-tuple-box_tuple_next>`. Returned value is zero after initialization or rewind and :ref:`box_tuple_field_count()<c_api-tuple-box_tuple_field_count>` after the end of iteration."
 msgstr ""
 
-#: ../doc/dev_guide/reference_capi/tuple.rst:283
-#: ../doc/dev_guide/reference_capi/tuple.rst:290
-#: ../doc/dev_guide/reference_capi/tuple.rst:305
-#: ../doc/dev_guide/reference_capi/tuple.rst:326
+#: ../doc/dev_guide/reference_capi/tuple.rst:279
+#: ../doc/dev_guide/reference_capi/tuple.rst:286
+#: ../doc/dev_guide/reference_capi/tuple.rst:301
+#: ../doc/dev_guide/reference_capi/tuple.rst:322
 msgid "a tuple iterator"
 msgstr ""
 
-#: ../doc/dev_guide/reference_capi/tuple.rst:284
+#: ../doc/dev_guide/reference_capi/tuple.rst:280
 msgid "position"
 msgstr ""
 
-#: ../doc/dev_guide/reference_capi/tuple.rst:288
+#: ../doc/dev_guide/reference_capi/tuple.rst:284
 msgid "Rewind iterator to the initial position."
 msgstr ""
 
-#: ../doc/dev_guide/reference_capi/tuple.rst:292
+#: ../doc/dev_guide/reference_capi/tuple.rst:288
 msgid "After: ``box_tuple_position(it) == 0``"
 msgstr ""
 
-#: ../doc/dev_guide/reference_capi/tuple.rst:296
+#: ../doc/dev_guide/reference_capi/tuple.rst:292
 msgid "Seek the tuple iterator."
 msgstr ""
 
-#: ../doc/dev_guide/reference_capi/tuple.rst:298
+#: ../doc/dev_guide/reference_capi/tuple.rst:294
 msgid "The result is a pointer to raw MessagePack data which can be decoded with mp_decode functions, for an example see the tutorial program :ref:`read.c <f_c_tutorial-read>`. The returned buffer is valid until the next call to ``box_tuple_*`` API. The requested ``field_no`` is returned by the next call to ``box_tuple_next(it)``."
 msgstr ""
 
-#: ../doc/dev_guide/reference_capi/tuple.rst:306
+#: ../doc/dev_guide/reference_capi/tuple.rst:302
 msgid "field number - zero-based position in MsgPack array"
 msgstr ""
 
-#: ../doc/dev_guide/reference_capi/tuple.rst:309
+#: ../doc/dev_guide/reference_capi/tuple.rst:305
 msgid "After:"
 msgstr ""
 
-#: ../doc/dev_guide/reference_capi/tuple.rst:311
+#: ../doc/dev_guide/reference_capi/tuple.rst:307
 msgid "``box_tuple_position(it) == field_not`` if returned value is not NULL."
 msgstr ""
 
-#: ../doc/dev_guide/reference_capi/tuple.rst:312
+#: ../doc/dev_guide/reference_capi/tuple.rst:308
 msgid "``box_tuple_position(it) == box_tuple_field_count(tuple)`` if returned value is NULL."
 msgstr ""
 
-#: ../doc/dev_guide/reference_capi/tuple.rst:319
+#: ../doc/dev_guide/reference_capi/tuple.rst:315
 msgid "Return the next tuple field from tuple iterator."
 msgstr ""
 
-#: ../doc/dev_guide/reference_capi/tuple.rst:321
+#: ../doc/dev_guide/reference_capi/tuple.rst:317
 msgid "The result is a pointer to raw MessagePack data which can be decoded with mp_decode functions, for an example see the tutorial program :ref:`read.c <f_c_tutorial-read>`. The returned buffer is valid until next call to ``box_tuple_*`` API."
 msgstr ""
 
-#: ../doc/dev_guide/reference_capi/tuple.rst:327
+#: ../doc/dev_guide/reference_capi/tuple.rst:323
 msgid "NULL if there are no more fields"
 msgstr ""
 
-#: ../doc/dev_guide/reference_capi/tuple.rst:328
+#: ../doc/dev_guide/reference_capi/tuple.rst:324
 msgid "MsgPack otherwise"
 msgstr ""
 
-#: ../doc/dev_guide/reference_capi/tuple.rst:330
+#: ../doc/dev_guide/reference_capi/tuple.rst:326
 msgid "Before: :ref:`box_tuple_position()<c_api-tuple-box_tuple_position>` is zero-based ID of returned field."
 msgstr ""
 
-#: ../doc/dev_guide/reference_capi/tuple.rst:333
+#: ../doc/dev_guide/reference_capi/tuple.rst:329
 msgid "After: ``box_tuple_position(it) == box_tuple_field_count(tuple)`` if returned value is NULL."
 msgstr ""
 

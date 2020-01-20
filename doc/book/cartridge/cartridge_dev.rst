@@ -500,16 +500,18 @@ Configuring custom roles
 
 You can:
 
-* Store your custom roles as sections in cluster-wide configuration,
-  for example:
+* Store configurations for your custom roles as sections in cluster-wide
+  configuration, for example:
 
   .. code-block:: yaml
 
+      # YAML configuration file
       my_role:
         notify_url: "https://localhost:8080"
 
   .. code-block:: lua
 
+      -- init.lua file
       local notify_url = 'http://localhost'
       function my_role.apply_config(conf, opts)
         local conf = conf['my_role'] or {}
@@ -968,9 +970,9 @@ Deploying as an rpm or deb package
 
    .. code-block:: console
 
-       $ cartridge pack rpm APP_NAME
+       $ cartridge pack rpm /path/to/<app_name>
        # -- OR --
-       $ cartridge pack deb APP_NAME
+       $ cartridge pack deb /path/to/<app_name>
 
    This will create an RPM package (e.g. ``./my_app-0.1.0-1.rpm``) or
    a DEB package (e.g. ``./my_app-0.1.0-1.deb``).
@@ -1013,7 +1015,7 @@ Deploying as a tar+gz archive
 
    .. code-block:: console
 
-       $ cartridge pack tgz APP_NAME
+       $ cartridge pack tgz /path/to/<app_name>
 
    This will create a tar+gz archive (e.g. ``./my_app-0.1.0-1.tgz``).
 

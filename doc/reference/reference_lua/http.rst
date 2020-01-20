@@ -55,27 +55,27 @@ Below is a list of all ``http`` functions.
     ``max_total_connections`` is the maximum number of active connections.
     It affects libcurl  `CURLMOPT_MAX_TOTAL_CONNECTIONS <https://curl.haxx.se/libcurl/c/CURLMOPT_MAX_TOTAL_CONNECTIONS.html>`_.
     It is ignored if the curl version is less than 7.30.
-    The default is 0, which allows libcurl to scale according to easy handles count.
+    The default is 0, which allows libcurl to scale accordingly to easily handles count.
     
     The default option values are usually good enough but in rare cases it
     might be good to set them. In that case here are two tips.
 
-    1. You may want to control the maximum number of sockets that a particular http client uses simultaneously.
-    If a system passes many requests to distinct hosts, then libcurl cannot reuse sockets.
-    In this case setting ``max_total_connections`` may be useful,
-    since it causes curl to avoid creating too many sockets which would not be used anyway.
+    1. You may want to control the maximum number of sockets that a particular HTTP client uses simultaneously.
+       If a system passes many requests to distinct hosts, then libcurl cannot reuse sockets.
+       In this case setting ``max_total_connections`` may be useful,
+       since it causes curl to avoid creating too many sockets which would not be used anyway.
 
     2. Do not set ``max_connections`` less than ``max_total_connections``
-    unless you are confident about your actions.
-    When ``max_connections`` is less then ``max_total_connections``, in some cases
-    libcurl will not reuse sockets for requests that are going to the same host.
-    If the limit is reached and a new request occurs, then 
-    libcurl will first create a new socket, send the request, wait for the first connection
-    to be free, and close it, in order to avoid exceeding the ``max_connections`` cache size.
-    In the worst case, libcurl will create a new socket for every request,
-    even if all requests are going to the same host.
-    See `this Tarantool issue on github <https://github.com/tarantool/tarantool/issues/3945>`_
-    for details.
+       unless you are confident about your actions.
+       When ``max_connections`` is less then ``max_total_connections``, in some cases
+       libcurl will not reuse sockets for requests that are going to the same host.
+       If the limit is reached and a new request occurs, then 
+       libcurl will first create a new socket, send the request, wait for the first connection
+       to be free, and close it, in order to avoid exceeding the ``max_connections`` cache size.
+       In the worst case, libcurl will create a new socket for every request,
+       even if all requests are going to the same host.
+       See `this Tarantool issue on github <https://github.com/tarantool/tarantool/issues/3945>`_
+       for details.
 
     :return: a new HTTP client instance
     :rtype:  userdata
@@ -116,10 +116,10 @@ Below is a list of all ``http`` functions.
           * ``keepalive_interval`` - the interval, in seconds, that the operating
             system will wait between sending keepalive probes. See also
             `CURLOPT_TCP_KEEPINTVL <https://curl.haxx.se/libcurl/c/CURLOPT_TCP_KEEPINTVL.html>`_.
-            If both keepalive_idle and keepalive_interval are set, then
-            Tarantool will also set HTTP keepalive headers: Connection:Keep-Alive
-            and Keep-Alive:timeout=<keepalive_idle>.
-            Otherwise Tarantool will send Connection:close
+            If both ``keepalive_idle`` and ``keepalive_interval`` are set, then
+            Tarantool will also set HTTP keepalive headers: ``Connection:Keep-Alive``
+            and ``Keep-Alive:timeout=<keepalive_idle>``.
+            Otherwise Tarantool will send ``Connection:close``
           * ``low_speed_limit`` - set the "low speed limit" -- the average
             transfer speed in bytes per second that the transfer should be below
             during "low speed time" seconds for the library to consider it to be
@@ -132,6 +132,14 @@ Below is a list of all ``http`` functions.
           * ``max_header_name_len`` - the maximal length of a header name. If a header
             name is bigger than this value, it is truncated to this length.
             The default value is '32'.
+          * ``follow_location`` - when the option is set to ``true`` (default)
+            and the response has a 3xx code, the HTTP client will automatically issue
+            another request to a location that a server sends in the ``Location``
+            header. If the new response is 3xx again, the HTTP client will
+            issue still another request and so on in a loop until a non-3xx response
+            will be received. This last response will be returned as a result.
+            Setting this option to ``false`` allows to disable this behavior.
+            In this case, the HTTP client will return a 3xx response itself.
           * ``no_proxy`` - a comma-separated list of hosts that do not require proxies, or '*', or ''.
             Set :samp:`no_proxy = {host} [, {host} ...]` to specify
             hosts that can be reached without requiring a proxy, even if ``proxy`` has
@@ -181,6 +189,17 @@ Below is a list of all ``http`` functions.
           * ``verify_peer`` - set on/off verification of the peer's SSL
             certificate. See also
             `CURLOPT_SSL_VERIFYPEER <https://curl.haxx.se/libcurl/c/CURLOPT_SSL_VERIFYPEER.html>`_
+          * ``accept_encoding`` - enables automatic decompression of HTTP responses
+            by setting the contents of the `Accept-Encoding: header` sent in an 
+            HTTP request and enabling decoding of a response when the `Content-Encoding: header` 
+            is received. This option specifies what encoding to use.
+            It can be an empty string which means the `Accept-Encoding: header` will
+            contain all supported built-in encodings. Four encodings are supported: `identity`, 
+            meaning non-compressed, `deflate` which requests the server to compress its 
+            response using the zlib algorithm, `gzip` which requests the gzip algorithm and `br` 
+            which is brotli. Provide them in the string as a comma-separated list of accepted 
+            encodings, like: ``"br, gzip, deflate"``. 
+            For details of the option, refer to `CURLOPT_ACCEPT_ENCODING <https://curl.haxx.se/libcurl/c/CURLOPT_ACCEPT_ENCODING.html>`_
 
         :return: connection information, with all of these components:
 

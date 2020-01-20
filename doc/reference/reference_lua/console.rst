@@ -51,7 +51,6 @@ Below is a list of all ``console`` functions.
     | <console-eos>`                       |                                 |
     +--------------------------------------+---------------------------------+
 
-
 .. module:: console
 
 .. _console-connect:
@@ -205,7 +204,7 @@ Below is a list of all ``console`` functions.
    Return the current default output format. The result will be
    ``fmt="yaml"``, or it will be ``fmt="lua"`` if
    the last :ref:`set_default_output <console-set_default_output>`
-   call was ``console.set_default_output('lua')``.  
+   call was ``console.set_default_output('lua')``.
 
 .. _console-set_default_output:
 

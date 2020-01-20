@@ -123,8 +123,14 @@ Below is a list of all ``box.space`` functions and members.
     | :ref:`box.space._index                       | (Metadata) List of indexes      |
     | <box_space-index>`                           |                                 |
     +----------------------------------------------+---------------------------------+
+    | :ref:`box.space._vindex                      | (Metadata) List of indexes      |
+    | <box_space-vindex>`                          | accessible for the current user |
+    +----------------------------------------------+---------------------------------+
     | :ref:`box.space._priv                        | (Metadata) List of privileges   |
     | <box_space-priv>`                            |                                 |
+    +----------------------------------------------+---------------------------------+
+    | :ref:`box.space._vpriv                       | (Metadata) List of privileges   |
+    | <box_space-vpriv>`                           | accessible for the current user |
     +----------------------------------------------+---------------------------------+
     | :ref:`box.space._schema                      | (Metadata) List of schemas      |
     | <box_space-schema>`                          |                                 |
@@ -138,20 +144,25 @@ Below is a list of all ``box.space`` functions and members.
     | :ref:`box.space._space                       | (Metadata) List of spaces       |
     | <box_space-space>`                           |                                 |
     +----------------------------------------------+---------------------------------+
+    | :ref:`box.space._vspace                      | (Metadata) List of spaces       |
+    | <box_space-vspace>`                          | accessible for the current user |
+    +----------------------------------------------+---------------------------------+
     | :ref:`box.space._user                        | (Metadata) List of users        |
     | <box_space-user>`                            |                                 |
     +----------------------------------------------+---------------------------------+
     | :ref:`box.space._ck_constraint               | (Metadata) List of check        |
     | <box_space-ck_constraint>`                   | constraints                     |
     +----------------------------------------------+---------------------------------+
+    | :ref:`box.space._vuser                       | (Metadata) List of users        |
+    | <box_space-vuser>`                           | accessible for the current user |
+    +----------------------------------------------+---------------------------------+
     | :ref:`box.space._collation                   | (Metadata) List of collations   |
     | <box_space-collation>`                       |                                 |
     +----------------------------------------------+---------------------------------+
-    | :ref:`box.space._vcollation, _vfunc,         | (Metadata) System views         |
-    | _vindex <box_space-system_views>` |br|       |                                 |
-    | :ref:`_vpriv, _vsequence, _vspace, _vuser    |                                 |
-    | <box_space-system_views>`                    |                                 |
+    | :ref:`box.space._vcollation                  | (Metadata) List of collations   |
+    | <box_space-vcollation>`                      | accessible for the current user |
     +----------------------------------------------+---------------------------------+
+
 
 .. module:: box.space
 
@@ -357,7 +368,7 @@ Below is a list of all ``box.space`` functions and members.
             tarantool> s = box.space.tester
             ---
             ...
-            tarantool> s:create_index('primary', {unique = true, parts = {1, 'unsigned', 2, 'string'}})
+            tarantool> s:create_index('primary', {unique = true, parts = { {field = 1, type = 'unsigned'}, {field = 2, type = 'string'}} })
             ---
             ...
 
@@ -483,7 +494,7 @@ Below is a list of all ``box.space`` functions and members.
 
     .. code-block:: lua
 
-        box.space.tester:create_index('I',{unique=true,parts={{2,'number',is_nullable=true}}})
+        box.space.tester:create_index('I',{unique=true,parts={{field = 2, type = 'number', is_nullable = true}}})
 
     .. WARNING::
 
@@ -507,7 +518,7 @@ Below is a list of all ``box.space`` functions and members.
     .. code-block:: lua
 
         box.space.tester:format({{name='x', type='scalar'}, {name='y', type='integer'}})
-        box.space.tester:create_index('I2',{parts={{'x','scalar'}}})
+        box.space.tester:create_index('I2',{parts={{'x', 'scalar'}}})
         box.space.tester:create_index('I3',{parts={{'x','scalar'},{'y','integer'}}})
         box.space.tester:create_index('I4',{parts={1,'scalar'}})
         box.space.tester:create_index('I5',{parts={1,'scalar',2,'integer'}})
@@ -531,7 +542,7 @@ Below is a list of all ``box.space`` functions and members.
         -- Example 1 -- The simplest use of path:
         -- Result will be - - [{'age': 44}]
         box.schema.space.create('T')
-        box.space.T:create_index('I',{parts={{1, 'scalar', path='age'}}})
+        box.space.T:create_index('I',{parts={{field = 1, type = 'scalar', path = 'age'}}})
         box.space.T:insert{{age=44}}
         box.space.T:select(44)
         -- Example 2 -- path plus format() plus JSON syntax to add clarity
@@ -553,7 +564,7 @@ Below is a list of all ``box.space`` functions and members.
     Indexes defined with this are useful for JSON documents that all have the same structure.
     For example, when creating an index on field#2 for a string document that will start
     with ``{'data': [{'name': '...'}, {'name': '...'}]``, the parts section in the
-    create_index request could look like: ``parts = {{2, 'str', path = 'data[*].name'}}``.
+    create_index request could look like: ``parts = {{field = 2, type = 'str', path = 'data[*].name'}}``.
     Then tuples containing names can be retrieved quickly with ``index_object:select({key-value})``.
     In fact a single field can have multiple keys, as in this example which retrieves the
     same tuple twice because there are two keys 'A' and 'B' which both match the request:
@@ -562,7 +573,7 @@ Below is a list of all ``box.space`` functions and members.
 
         s = box.schema.space.create('json_documents')
         s:create_index('primarykey')
-        i = s:create_index('multikey', {parts = {{2, 'str', path = 'data[*].name'}}})
+        i = s:create_index('multikey', {parts = {{field = 2, type = 'str', path = 'data[*].name'}}})
         s:insert({1,
                  {data = {{name='A'},
                           {name='B'}},
@@ -620,7 +631,7 @@ Below is a list of all ``box.space`` functions and members.
         -- The space needs a primary-key field, which is not the field that we
         -- will use for the functional index.
         box.schema.space.create('x', {engine = 'memtx'})
-        box.space.x:create_index('i',{parts={1, 'string'}})
+        box.space.x:create_index('i',{parts={field = 1, type = 'string'}})
         -- Step 2: Make the function.
         -- The function expects a tuple. In this example it will work on tuple[2]
         -- because the key souce is field number 2 in what we will insert.
@@ -633,7 +644,7 @@ Below is a list of all ``box.space`` functions and members.
         -- Step 4: Make the functional index.
         -- Specify the fields whose values will be passed to the function.
         -- Specify the function.
-        box.space.x:create_index('j',{parts={1, 'string'},func = 'F'})
+        box.space.x:create_index('j',{parts={field = 1, type = 'string'},func = 'F'})
         -- Step 5: Test.
         -- Insert a few tuples.
         -- Select using only the first letter, it will work because that is the key
@@ -674,7 +685,7 @@ Below is a list of all ``box.space`` functions and members.
         s = box.schema.space.create('withdata')
         s:format({{name = 'name', type = 'string'},
                   {name = 'address', type = 'string'}})
-        pk = s:create_index('name', {parts = {1, 'string'}})
+        pk = s:create_index('name', {parts = {field = 1, type = 'string'}})
         lua_code = [[function(tuple)
                        local address = string.split(tuple[2])
                        local ret = {}
@@ -690,7 +701,7 @@ Below is a list of all ``box.space`` functions and members.
                                  opts = {is_multikey = true}})
         idx = s:create_index('addr', {unique = false,
                                       func = 'address',
-                                      parts = {{1, 'string',
+                                      parts = {{field = 1, type = 'string',
                                               collation = 'unicode_ci'}}})
         s:insert({"James", "SIS Building Lambeth London UK"})
         s:insert({"Sherlock", "221B Baker St Marylebone London NW1 6XE UK"})
@@ -893,7 +904,7 @@ Below is a list of all ``box.space`` functions and members.
                      >                      {name='10',type='map'}})
             ---
             ...
-            tarantool> box.space.t:create_index('i',{parts={2,'unsigned'}})
+            tarantool> box.space.t:create_index('i',{parts={field = 2, type = 'unsigned'}})
             ---
             - unique: true
               parts:
@@ -1166,7 +1177,7 @@ Below is a list of all ``box.space`` functions and members.
         .. code-block:: tarantoolsession
 
             tarantool> s = box.schema.space.create('space53')
-            tarantool> s:create_index('primary', {parts = {1, 'unsigned'}})
+            tarantool> s:create_index('primary', {parts = {{field = 1, type = 'unsigned'}}})
             tarantool> function replace_trigger()
                      >   replace_counter = replace_counter + 1
                      > end
@@ -1460,7 +1471,7 @@ Below is a list of all ``box.space`` functions and members.
             tarantool> s = box.schema.space.create('tmp', {temporary=true})
             ---
             ...
-            tarantool> s:create_index('primary',{parts = {1,'unsigned', 2, 'string'}})
+            tarantool> s:create_index('primary',{parts = { {field = 1, type = 'unsigned'}, {field = 2, type = 'string'}} })
             ---
             ...
             tarantool> s:insert{1,'A'}
@@ -2008,8 +2019,6 @@ Below is a list of all ``box.space`` functions and members.
       ---
       ...
 
-   The :ref:`system view <box_space-system_views>` for ``_func`` is ``_vfunc``.
-
 .. _box_space-index:
 
 .. data:: _index
@@ -2047,7 +2056,26 @@ Below is a list of all ``box.space`` functions and members.
        ---
        ...
 
-   The :ref:`system view <box_space-system_views>` for ``_index`` is ``_vindex``.
+.. _box_space-vindex:
+
+.. data:: _vindex
+
+    ``_vindex`` is a system space that represents a virtual view. The structure
+    of its tuples is identical to that of :ref:`_index <box_space-index>`, but
+    permissions for certain tuples are limited in accordance with user privileges.
+    ``_vindex`` contains only those tuples that are accessible to the current user.
+    See :ref:`Access control <authentication>` for details about user privileges.
+
+    If the user has the full set of privileges (like 'admin'), the contents
+    of ``_vindex`` match the contents of ``_index``. If the user has limited
+    access, ``_vindex`` contains only tuples accessible to this user.
+
+    .. NOTE::
+
+       * ``_vindex`` is a system view, so it allows only read requests.
+
+       * While the ``_index`` space requires proper access privileges, any user
+         can always read from ``_vindex``.
 
 .. _box_space-priv:
 
@@ -2088,7 +2116,26 @@ Below is a list of all ``box.space`` functions and members.
        * Only the 'admin' user or the creator of a user can change a different
          user’s password.
 
-   The :ref:`system view <box_space-system_views>` for ``_priv`` is ``__vpriv``.
+.. _box_space-vpriv:
+
+.. data:: _vpriv
+
+    ``_vpriv`` is a system space that represents a virtual view. The structure
+    of its tuples is identical to that of :ref:`_priv <box_space-priv>`, but
+    permissions for certain tuples are limited in accordance with user privileges.
+    ``_vpriv`` contains only those tuples that are accessible to the current user.
+    See :ref:`Access control <authentication>` for details about user privileges.
+
+    If the user has the full set of privileges (like 'admin'), the contents
+    of ``_vpriv`` match the contents of ``_priv``. If the user has limited
+    access, ``_vpriv`` contains only tuples accessible to this user.
+
+    .. NOTE::
+
+       * ``_vpriv`` is a system view, so it allows only read requests.
+
+       * While the ``_priv`` space requires proper access privileges, any user
+         can always read from ``_vpriv``.
 
 .. _box_space-schema:
 
@@ -2134,8 +2181,6 @@ Below is a list of all ``box.space`` functions and members.
     :ref:`box.schema.sequence.create() <box_schema-sequence_create>` or
     :ref:`box.schema.sequence.alter() <box_schema-sequence_alter>`.
 
-    The :ref:`system view <box_space-system_views>` for ``_sequence`` is ``_vsequence``.
-
 .. _box_space-sequence_data:
 
 .. data:: _sequence_data
@@ -2156,7 +2201,8 @@ Below is a list of all ``box.space`` functions and members.
 
 .. data:: _space
 
-    ``_space`` is a system space.
+    ``_space`` is a system space. It contains all spaces hosted on the current
+    Tarantool instance, both system ones and created by users.
 
     Tuples in this space contain the following fields:
 
@@ -2171,7 +2217,7 @@ Below is a list of all ``box.space`` functions and members.
 
     **Example #1:**
 
-    The following function will display all simple fields in all tuples of
+    The following function will display every simple field in all tuples of
     ``_space``.
 
     .. code-block:: lua
@@ -2247,7 +2293,26 @@ Below is a list of all ``box.space`` functions and members.
         - - [12345, 1, 'TM', 'memtx', 0, {}, [{'name': 'field_1'}, {'type': 'unsigned'}]]
         ...
 
-   The :ref:`system view <box_space-system_views>` for ``_space`` is ``_vspace``.
+.. _box_space-vspace:
+
+.. data:: _vspace
+
+    ``_vspace`` is a system space that represents a virtual view. The structure
+    of its tuples is identical to that of :ref:`_space <box_space-space>`, but
+    permissions for certain tuples are limited in accordance with user privileges.
+    ``_vspace`` contains only those tuples that are accessible to the current user.
+    See :ref:`Access control <authentication>` for details about user privileges.
+
+    If the user has the full set of privileges (like 'admin'), the contents
+    of ``_vspace`` match the contents of ``_space``. If the user has limited
+    access, ``_vspace`` contains only tuples accessible to this user.
+
+    .. NOTE::
+
+       * ``_vspace`` is a system view, so it allows only read requests.
+
+       * While the ``_space`` space requires proper access privileges, any user
+         can always read from ``_vspace``.
 
 .. _box_space-user:
 
@@ -2387,8 +2452,6 @@ Below is a list of all ``box.space`` functions and members.
         tarantool> box.schema.user.drop('JeanMartin')
         ---
         ...
-
-   The :ref:`system view <box_space-system_views>` for ``_user`` is ``_vuser``.
 
 .. _box_space-ck_constraint:
 
@@ -2534,73 +2597,16 @@ organizing:
     ---
     ...
 
-.. _box_space-collation:
+.. _box_space-vuser:
 
-.. data:: _collation
+.. data:: _vuser
 
-    ``_collation`` is a system space with a list of :ref:`collations <index-collation>`.
-    There are over 270 built-in collations and users may add more. Here is one example:
-
-    .. code-block:: tarantoolsession
-
-        localhost:3301> box.space._collation:select(239)
-        ---
-        - - [239, 'unicode_uk_s2', 1, 'ICU', 'uk', {'strength': 'secondary'}]
-        ...
-
-    Explanation of the fields in the example: id = 239 i.e. Tarantool's primary key is 239,
-    name = 'unicode_uk_s2' i.e. according to Tarantool's naming convention this is a
-    Unicode collation + it is for the uk locale + it has secondary strength,
-    owner = 1 i.e. :ref:`the admin user <authentication-owners_privileges>`,
-    type = 'ICU' i.e. the rules are according to `International Components for Unicode <http://site.icu-project.org/home>`_,
-    locale = 'uk' i.e. `Ukrainian <http://www.unicode.org/cldr/charts/29/collation/uk.html>`_,
-    opts = 'strength:secondary' i.e. with this collation comparisons use both primary and secondary
-    `weights <https://unicode.org/reports/tr10/#Weight_Level_Defn>`_.
-
-    The :ref:`system view <box_space-system_views>` for ``_collation`` is ``_vcollation``.
-
-.. _box_space-system_views:
-
-===============
-System views
-===============
-
-    A system view, also called a 'sysview', is a restricted copy of a system space.
-
-    The system views and the spaces that they are associated with are: |br|
-    ``_vcollation``, a view of :ref:`_collation <box_space-collation>`, |br|
-    ``_vfunc``, a view of :ref:`_func <box_space-func>`, |br|
-    ``_vindex``, a view of :ref:`_index <box_space-index>`, |br|
-    ``_vpriv``, a view of :ref:`_priv <box_space-priv>`, |br|
-    ``_vsequence``, a view of :ref:`_sequence <box_space-sequence>`, |br|
-    ``_vspace``, a view of :ref:`_space <box_space-space>`, |br|
-    ``_vuser``, a view of :ref:`_user <box_space-user>`.
-
-    The structure of a system view's tuples is identical to the
-    structure of the associated space's tuples. However, the privileges for a
-    system view are usually different. By default, ordinary users do not have
-    any privileges for most system spaces, but have a 'read' privilege for system views.
-
-    Typically this is the default situation: |br|
-    * :ref:`The 'public' role <box_space-user>` has 'read' privilege on all system views
-    because that is the situation when the database is first created. |br|
-    * All users have the 'public' role, because it is granted
-    to them automatically during :ref:`box.schema.user.create() <box_schema-user_create>`. |br|
-    * The system view will contain the tuples in the associated system space,
-    if and only if the user has a privilege for the object named in the tuple. |br|
-    Unless administrators change the privileges, the effect is that non-administrator
-    users cannot access the system space, but they can access the system view, which shows
-    only the the objects that they can access.
-
-    For example, typically, the 'admin' user can do anything with ``_space`` and ``_vspace``
-    looks the same as ``_space``. But the 'guest' user can only read ``_vspace``, and
-    ``_vspace`` contains fewer tuples than ``_space``. Therefore in most installations
-    the 'guest' user should select from ``_vspace`` to get a list of spaces.
-
+    ``_vuser`` is a system space that represents a virtual view. The structure
+    of its tuples is identical to that of :ref:`_user <box_space-user>`, but
+    permissions for certain tuples are limited in accordance with user privileges.
+    ``_vuser`` contains only those tuples that are accessible to the current user.
     See :ref:`Access control <authentication>` for details about user privileges.
 
-    Here is an example showing the difference between ``_vuser`` and ``_user``.
-    We have explained that:
     If the user has the full set of privileges (like 'admin'), the contents
     of ``_vuser`` match the contents of ``_user``. If the user has limited
     access, ``_vuser`` contains only tuples accessible to this user.
@@ -2611,8 +2617,8 @@ System views
     space, both when the 'guest' user *is* and *is not* allowed to read from the
     database.
 
-    First, start Tarantool and grant read, write and execute
-    privileges to the 'guest' user:
+    First, start Tarantool and grant the 'guest' user with read, write and execute
+    privileges:
 
     .. code-block:: tarantoolsession
 
@@ -2671,6 +2677,45 @@ System views
         - - [0, 1, 'guest', 'user', {}]
         ...
 
+    .. NOTE::
+
+        * ``_vuser`` is a system view, so it allows only read requests.
+        * While the ``_user`` space requires proper access privileges, any user
+          can always read from ``_vuser``.
+
+
+.. _box_space-collation:
+
+.. data:: _collation
+
+    ``_collation`` is a system space with a list of :ref:`collations <index-collation>`.
+    There are over 270 built-in collations and users may add more. Here is one example:
+
+    .. code-block:: tarantoolsession
+
+        localhost:3301> box.space._collation:select(239)
+        ---
+        - - [239, 'unicode_uk_s2', 1, 'ICU', 'uk', {'strength': 'secondary'}]
+        ...
+
+    Explanation of the fields in the example: id = 239 i.e. Tarantool's primary key is 239,
+    name = 'unicode_uk_s2' i.e. according to Tarantool's naming convention this is a
+    Unicode collation + it is for the uk locale + it has secondary strength,
+    owner = 1 i.e. :ref:`the admin user <authentication-owners_privileges>`,
+    type = 'ICU' i.e. the rules are according to `International Components for Unicode <http://site.icu-project.org/home>`_,
+    locale = 'uk' i.e. `Ukrainian <http://www.unicode.org/cldr/charts/29/collation/uk.html>`_,
+    opts = 'strength:secondary' i.e. with this collation comparisons use both primary and secondary
+    `weights <https://unicode.org/reports/tr10/#Weight_Level_Defn>`_.
+
+.. _box_space-vcollation:
+
+.. data:: _vcollation
+
+    ``_vcollation`` is a system space with a list of :ref:`collations <index-collation>`.
+    The structure
+    of its tuples is identical to that of :ref:`box.space._collation <box_space-collation>`, but
+    permissions for certain tuples are limited in accordance with user privileges.
+
 .. _box_space-operations-detailed-examples:
 
 ===============================================================================
@@ -2696,11 +2741,11 @@ for each :ref:`data operation <index-box_data-operations>` in Tarantool:
     format[3] = {'field3', 'unsigned'}
     s = box.schema.create_space('test', {format = format})
     -- Create a primary index --
-    pk = s:create_index('pk', {parts = {{'field1'}}})
+    pk = s:create_index('pk', {parts = {{field = 'field1'}}})
     -- Create a unique secondary index --
-    sk_uniq = s:create_index('sk_uniq', {parts = {{'field2'}}})
+    sk_uniq = s:create_index('sk_uniq', {parts = {{field = 'field2'}}})
     -- Create a non-unique secondary index --
-    sk_non_uniq = s:create_index('sk_non_uniq', {parts = {{'field3'}}, unique = false})
+    sk_non_uniq = s:create_index('sk_non_uniq', {parts = {{field = 'field3'}}, unique = false})
 
 .. _box_space-operations-insert:
 
@@ -2826,7 +2871,7 @@ The key must be full: ``delete`` cannot work with partial keys.
     tarantool> s2 = box.schema.create_space('test2')
     ---
     ...
-    tarantool> pk2 = s2:create_index('pk2', {parts = {{1, 'unsigned'}, {2, 'unsigned'}}})
+    tarantool> pk2 = s2:create_index('pk2', {parts = {{field = 1, type = 'unsigned'}, {field = 2, type = 'unsigned'}}})
     ---
     ...
     tarantool> s2:insert{1, 1}
