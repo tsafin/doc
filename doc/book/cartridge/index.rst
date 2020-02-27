@@ -17,3 +17,4 @@ This chapter contains the following sections:
    cartridge_overview
    cartridge_dev
    cartridge_admin
+   Cartridge API<cartridge_api/index>
